@@ -57,17 +57,18 @@
   nav{
     position:sticky; top:0; z-index:50;
     display:flex; align-items:center; justify-content:space-between;
-    padding:16px 5vw;
+    padding:10px 5vw;
     background:rgba(11,13,18,0.88);
     backdrop-filter:blur(10px);
     border-bottom:1px solid var(--steel-line);
   }
   .brand{ display:flex; align-items:center; gap:12px; }
-  .brand img{ height:38px; width:auto; }
+  .brand img{ height:58px; width:auto; display:block; }
   .brand span{
     font-family:'Oswald',sans-serif; font-style:italic; font-weight:600;
     font-size:18px; letter-spacing:.03em; text-transform:uppercase;
   }
+  @media (max-width:480px){ .brand img{ height:44px; } }
   .navlinks{ display:flex; gap:32px; align-items:center; }
   .navlinks a{
     color:var(--cloud); text-decoration:none;
@@ -328,8 +329,7 @@
 
 <nav>
   <div class="brand">
-    <img src="assets/logo.jpeg" alt="Ucop Spikes">
-    <span>Ucop Spikes</span>
+    <img src="assets/logo.png" alt="Ucop Spikes">
   </div>
   <div class="navlinks">
     <a href="#catalog">Catalog</a>
@@ -348,7 +348,6 @@
     </div>
   </div>
   <div class="hero-visual">
-  </div>
   </div>
 </section>
 
