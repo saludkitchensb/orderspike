@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UCOP SPIKES — Catalog</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0B0D12;
+    --ink-soft:#171A21;
+    --cloud:#F3F3EF;
+    --cloud-dim:#E7E7E1;
+    --track-red:#FF3B30;
+    --volt:#C6FF3D;
+    --steel:#8B92A0;
+    --steel-line:#2A2E38;
+    --radius:2px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--ink);
+    color:var(--cloud);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--volt); color:var(--ink);}
+
+  .eyebrow{
+    font-family:'Space Mono',monospace;
+    font-size:12px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--volt);
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:18px; height:2px;
+    background:var(--track-red);
+    display:inline-block;
+  }
+
+  h1,h2,h3{
+    font-family:'Oswald',sans-serif;
+    font-style:italic;
+    text-transform:uppercase;
+    letter-spacing:.01em;
+    line-height:.95;
+  }
+
+  /* ===== NAV ===== */
+  nav{
+    position:sticky; top:0; z-index:50;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 5vw;
+    background:rgba(11,13,18,0.88);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--steel-line);
+  }
+  .brand{ display:flex; align-items:center; gap:12px; }
+  .brand img{ height:58px; width:auto; display:block; }
+  .brand span{
+    font-family:'Oswald',sans-serif; font-style:italic; font-weight:600;
+    font-size:18px; letter-spacing:.03em; text-transform:uppercase;
+  }
+  @media (max-width:480px){ .brand img{ height:44px; } }
+  .navlinks{ display:flex; gap:32px; align-items:center; }
+  .navlinks a{
+    color:var(--cloud); text-decoration:none;
+    font-family:'Space Mono',monospace; font-size:12px;
+    letter-spacing:.1em; text-transform:uppercase;
+    opacity:.75; transition:opacity .2s, color .2s;
+  }
+  .navlinks a:hover{ opacity:1; color:var(--volt); }
+  .navlinks a.cta{
+    background:var(--track-red); color:var(--ink);
+    padding:10px 18px; opacity:1; font-weight:700;
+  }
+  .navlinks a.cta:hover{ background:var(--volt); color:var(--ink); }
+  @media (max-width:760px){ .navlinks{ display:none; } }
+
+  /* ===== HERO ===== */
+  .hero{
+    position:relative;
+    padding:70px 5vw 40px;
+    display:grid;
+    grid-template-columns:1.1fr .9fr;
+    gap:40px;
+    align-items:center;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      repeating-linear-gradient(115deg, transparent 0 90px, rgba(255,59,48,.08) 90px 94px, transparent 94px 180px),
+      repeating-linear-gradient(115deg, transparent 0 140px, rgba(198,255,61,.06) 140px 144px, transparent 144px 260px);
+    pointer-events:none;
+  }
+  .hero-copy{ position:relative; z-index:2; }
+  .bib-number{
+    font-family:'Space Mono',monospace;
+    font-size:13px; color:var(--steel);
+    letter-spacing:.1em;
+    margin-bottom:18px;
+  }
+  .bib-number b{ color:var(--volt); }
+  .hero h1{
+    font-size:clamp(40px, 6.4vw, 92px);
+    color:var(--cloud);
+    margin-bottom:22px;
+  }
+  .hero h1 .accent{ color:var(--track-red); }
+  .hero p{
+    font-size:16px; color:var(--steel);
+    max-width:440px; margin-bottom:30px;
+    font-family:'Inter',sans-serif;
+  }
+  .hero-actions{ display:flex; gap:14px; flex-wrap:wrap; }
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'Space Mono',monospace; font-size:12.5px;
+    letter-spacing:.08em; text-transform:uppercase; font-weight:700;
+    padding:15px 26px; text-decoration:none; border:1px solid transparent;
+    cursor:pointer; transition:transform .15s ease, background .2s, color .2s;
+  }
+  .btn:active{ transform:scale(.97); }
+  .btn-primary{ background:var(--volt); color:var(--ink); }
+  .btn-primary:hover{ background:var(--cloud); }
+  .btn-outline{ border-color:var(--steel-line); color:var(--cloud); }
+  .btn-outline:hover{ border-color:var(--volt); color:var(--volt); }
+
+  .hero-visual{ position:relative; z-index:2; }
+  .hero-visual .stage{
+    background:var(--cloud);
+    border-radius:var(--radius);
+    padding:26px;
+    position:relative;
+    transform:rotate(-1.4deg);
+  }
+  .hero-visual .stage img{ width:100%; display:block; filter:drop-shadow(0 30px 40px rgba(0,0,0,.5)); }
+  .hero-visual .tag{
+    position:absolute; top:-14px; right:-14px;
+    background:var(--track-red); color:var(--ink);
+    font-family:'Space Mono',monospace; font-size:11px; font-weight:700;
+    padding:8px 12px; letter-spacing:.06em;
+    transform:rotate(4deg);
+  }
+  .hero-visual .photo-panel{
+    position:relative;
+    transform:rotate(-1.2deg);
+    border:1px solid var(--steel-line);
+    box-shadow:0 30px 50px rgba(0,0,0,.55);
+    overflow:hidden;
+  }
+  .hero-visual .photo-panel img{
+    width:100%; display:block;
+    filter:saturate(1.12) contrast(1.06);
+  }
+  .hero-visual .photo-panel::after{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      linear-gradient(200deg, rgba(255,59,48,.16), transparent 45%),
+      linear-gradient(0deg, rgba(11,13,18,.75) 0%, rgba(11,13,18,0) 32%),
+      linear-gradient(180deg, rgba(11,13,18,.15) 0%, transparent 20%);
+    mix-blend-mode:normal;
+    pointer-events:none;
+  }
+  .hero-visual .photo-panel::before{
+    content:"";
+    position:absolute; inset:0;
+    box-shadow:inset 0 0 0 1px rgba(198,255,61,.12);
+    pointer-events:none; z-index:2;
+  }
+  @media (max-width:900px){
+    .hero{ grid-template-columns:1fr; padding-top:40px; }
+    .hero-visual{ order:-1; }
+  }
+
+  /* ===== FINISH LINE DIVIDER ===== */
+  .finish-line{
+    height:14px;
+    background:repeating-linear-gradient(90deg, var(--cloud) 0 26px, var(--ink) 26px 52px);
+    border-top:1px solid var(--steel-line);
+    border-bottom:1px solid var(--steel-line);
+  }
+
+  /* ===== FILTER BAR ===== */
+  .filter-bar{
+    display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+    padding:34px 5vw 10px;
+  }
+  .filter-bar .label{
+    font-family:'Space Mono',monospace; font-size:11px; color:var(--steel);
+    letter-spacing:.1em; text-transform:uppercase; margin-right:8px;
+  }
+  .chip{
+    font-family:'Space Mono',monospace; font-size:12px;
+    letter-spacing:.05em; text-transform:uppercase;
+    padding:9px 16px; border:1px solid var(--steel-line);
+    background:transparent; color:var(--cloud);
+    cursor:pointer; transition:all .15s ease;
+  }
+  .chip.active, .chip:hover{ background:var(--volt); border-color:var(--volt); color:var(--ink); }
+
+  /* ===== PRODUCT GRID ===== */
+  .catalog{
+    padding:26px 5vw 100px;
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(270px, 1fr));
+    gap:26px;
+  }
+  .card{
+    background:var(--ink-soft);
+    border:1px solid var(--steel-line);
+    position:relative;
+    cursor:pointer;
+    transition:border-color .2s, transform .2s;
+  }
+  .card:hover{ border-color:var(--volt); transform:translateY(-4px); }
+  .card .bib{
+    position:absolute; top:12px; left:12px; z-index:3;
+    font-family:'Space Mono',monospace; font-size:11px; font-weight:700;
+    background:var(--ink); border:1px solid var(--steel-line);
+    color:var(--volt); padding:5px 9px; letter-spacing:.05em;
+  }
+  .card .frame{
+    background:var(--cloud); aspect-ratio:1/.82;
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden; padding:22px;
+  }
+  .card .frame img{ width:100%; object-fit:contain; transition:transform .3s ease; }
+  .card:hover .frame img{ transform:scale(1.05); }
+  .card .info{ padding:18px 18px 20px; }
+  .card .info .cat{
+    font-family:'Space Mono',monospace; font-size:10.5px; color:var(--track-red);
+    letter-spacing:.1em; text-transform:uppercase; margin-bottom:6px;
+  }
+  .card .info h3{
+    font-size:21px; color:var(--cloud); font-style:italic;
+    margin-bottom:10px;
+  }
+  .card .info .row{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-top:4px;
+  }
+  .card .info .price{
+    font-family:'Space Mono',monospace; font-weight:700; color:var(--cloud); font-size:15px;
+  }
+  .card .info .check{
+    font-family:'Space Mono',monospace; font-size:10.5px; color:var(--steel);
+    letter-spacing:.06em; text-transform:uppercase;
+  }
+  .card .info .check b{ color:var(--volt); }
+  .card .swatches{ display:flex; gap:7px; margin-top:12px; }
+  .card .swatch{
+    width:18px; height:18px; border-radius:50%;
+    border:1px solid rgba(255,255,255,.25);
+    cursor:pointer; position:relative;
+    transition:transform .15s;
+  }
+  .card .swatch.active{ box-shadow:0 0 0 2px var(--ink-soft), 0 0 0 3px var(--volt); }
+  .card .swatch:hover{ transform:scale(1.12); }
+
+  /* ===== MODAL ===== */
+  .overlay{
+    position:fixed; inset:0; background:rgba(6,7,10,.86);
+    display:none; align-items:flex-start; justify-content:center;
+    padding:40px 5vw; z-index:100; overflow-y:auto;
+  }
+  .overlay.open{ display:flex; }
+  .modal{
+    background:var(--ink-soft); border:1px solid var(--steel-line);
+    max-width:920px; width:100%;
+    display:grid; grid-template-columns:1fr 1fr;
+    gap:0; position:relative;
+  }
+  .modal-close{
+    position:absolute; top:16px; right:16px; z-index:5;
+    background:var(--ink); border:1px solid var(--steel-line); color:var(--cloud);
+    width:36px; height:36px; font-size:18px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .modal-close:hover{ border-color:var(--track-red); color:var(--track-red); }
+  .modal-gallery{ background:var(--cloud); padding:24px; }
+  .modal-gallery .main{ aspect-ratio:1/.85; display:flex; align-items:center; justify-content:center; margin-bottom:14px; }
+  .modal-gallery .main img{ width:100%; object-fit:contain; }
+  .modal-thumbs{ display:flex; gap:10px; }
+  .modal-thumbs img{
+    width:60px; height:52px; object-fit:contain; background:#fff;
+    border:1px solid var(--cloud-dim); cursor:pointer; padding:4px;
+    transition:border-color .15s;
+  }
+  .modal-thumbs img.active, .modal-thumbs img:hover{ border-color:var(--track-red); }
+  .modal-body{ padding:34px 30px; display:flex; flex-direction:column; }
+  .modal-body .cat{
+    font-family:'Space Mono',monospace; font-size:11px; color:var(--track-red);
+    letter-spacing:.1em; text-transform:uppercase; margin-bottom:8px;
+  }
+  .modal-body h2{ font-size:32px; color:var(--cloud); margin-bottom:10px; }
+  .modal-body .price{
+    font-family:'Space Mono',monospace; font-size:20px; font-weight:700;
+    color:var(--volt); margin-bottom:18px;
+  }
+  .modal-body .desc{
+    font-size:14px; color:var(--steel); line-height:1.6; margin-bottom:24px;
+  }
+  .color-label{
+    font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--steel); margin-bottom:10px;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .color-label .current{ color:var(--volt); text-transform:none; letter-spacing:0; }
+  .colors{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom:22px; }
+  .color-swatch{
+    width:32px; height:32px; border-radius:50%;
+    border:1px solid rgba(255,255,255,.25);
+    cursor:pointer; transition:all .15s;
+  }
+  .color-swatch.selected{ box-shadow:0 0 0 2px var(--ink-soft), 0 0 0 4px var(--volt); }
+  .size-label{
+    font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--steel); margin-bottom:10px;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .size-guide-link{
+    font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.05em;
+    text-transform:none; color:var(--track-red); text-decoration:underline;
+    cursor:pointer; background:none; border:none; padding:0;
+  }
+  .size-guide-link:hover{ color:var(--volt); }
+  .sizes{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:26px; }
+  .size{
+    min-width:44px; padding:9px 6px; text-align:center;
+    border:1px solid var(--steel-line); background:transparent;
+    color:var(--cloud); font-family:'Space Mono',monospace; font-size:13px;
+    cursor:pointer; transition:all .15s;
+  }
+  .size.selected{ background:var(--volt); border-color:var(--volt); color:var(--ink); font-weight:700; }
+  .modal-body .note{
+    font-size:12px; color:var(--steel); margin-bottom:18px; line-height:1.55;
+    border-left:2px solid var(--track-red); padding-left:12px;
+  }
+  .whatsapp-btn{
+    margin-top:auto;
+    background:var(--track-red); color:var(--ink);
+    font-family:'Space Mono',monospace; font-weight:700; font-size:13px;
+    letter-spacing:.06em; text-transform:uppercase;
+    padding:16px; text-align:center; text-decoration:none;
+    display:block; transition:background .2s;
+  }
+  .whatsapp-btn:hover{ background:var(--volt); }
+  .whatsapp-btn.disabled{
+    background:var(--steel-line); color:var(--steel); pointer-events:none;
+  }
+  @media (max-width:720px){
+    .modal{ grid-template-columns:1fr; }
+  }
+
+  /* ===== SIZE GUIDE ===== */
+  .sg-modal{
+    background:var(--ink-soft); border:1px solid var(--steel-line);
+    max-width:520px; width:100%; position:relative;
+    padding:32px 28px;
+  }
+  .sg-modal h3{ font-size:26px; color:var(--cloud); margin-bottom:6px; }
+  .sg-modal .sub{
+    font-family:'Space Mono',monospace; font-size:11.5px; color:var(--steel);
+    margin-bottom:20px;
+  }
+  .sg-table{ width:100%; border-collapse:collapse; }
+  .sg-table th{
+    font-family:'Space Mono',monospace; font-size:10.5px; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--volt); text-align:left;
+    padding:9px 8px; border-bottom:1px solid var(--steel-line);
+  }
+  .sg-table td{
+    font-family:'Space Mono',monospace; font-size:13px; color:var(--cloud);
+    padding:8px; border-bottom:1px solid rgba(255,255,255,.06);
+  }
+  .sg-table tr:hover td{ background:rgba(198,255,61,.05); }
+  .sg-note{
+    margin-top:16px; font-size:12px; color:var(--steel); line-height:1.55;
+    border-left:2px solid var(--track-red); padding-left:12px;
+  }
+
+  /* ===== INFO STRIP ===== */
+  .info-strip{
+    border-top:1px solid var(--steel-line);
+    padding:60px 5vw; display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
+    gap:30px;
+  }
+  .info-strip .item .eyebrow{ margin-bottom:10px; }
+  .info-strip .item p{ font-size:13.5px; color:var(--steel); line-height:1.6; }
+
+  footer{
+    border-top:1px solid var(--steel-line);
+    padding:26px 5vw; text-align:center;
+    font-family:'Space Mono',monospace; font-size:11px; color:var(--steel);
+    letter-spacing:.05em;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand">
+    <img src="assets/logo.png" alt="Ucop Spikes">
+  </div>
+  <div class="navlinks">
+    <a href="#catalog">Catalog</a>
+    <a href="#" id="navSizeGuide">Size Guide</a>
+    <a href="#how">How To Order</a>
+    <a href="order.html">Place Order</a>
+    <a href="https://wa.me/601126103958" target="_blank" class="cta">WhatsApp Us</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-copy">
+    <h1>Your Gateway<br>to Authentic<br><span class="accent">Global Track Gear.</span></h1>
+    <p>Track & field spikes for sprinters, distance runners and jumpers. Every pair confirmed by hand before it ships — DM us your size, we check the rack, you race.</p>
+    <div class="hero-actions">
+      <a href="#catalog" class="btn btn-primary">Shop the catalog</a>
+      <a href="#how" class="btn btn-outline">How ordering works</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="photo-panel">
+      <img src="assets/spike-lineup.jpg" alt="Track spikes lineup - authentic imported track and field shoes">
+    </div>
+  </div>
+</section>
+
+<div class="finish-line"></div>
+
+<div class="filter-bar" id="catalog">
+  <span class="label">Filter</span>
+  <button class="chip active" data-filter="all">All Spikes</button>
+  <button class="chip" data-filter="sprint">Sprint</button>
+  <button class="chip" data-filter="distance">Middle / Long Distance</button>
+  <button class="chip" data-filter="field">Field Events</button>
+</div>
+
+<div class="catalog" id="catalog-grid">
+  <!-- Card injected by JS from PRODUCTS array -->
+</div>
+
+<div class="info-strip" id="how">
+  <div class="item">
+    <div class="eyebrow">Step 01</div>
+    <p><strong style="color:var(--cloud)">Pick a spike & size.</strong> Tap any pair, choose the size you need, hit "Check availability on WhatsApp."</p>
+  </div>
+  <div class="item">
+    <div class="eyebrow">Step 02</div>
+    <p><strong style="color:var(--cloud)">We confirm stock.</strong> Sizes are hand-checked before any order is locked in — no surprise sold-outs.</p>
+  </div>
+  <div class="item">
+    <div class="eyebrow">Step 03</div>
+    <p><strong style="color:var(--cloud)">Pay & choose delivery.</strong> Bank transfer or QR. Worldwide shipping, Lalamove locally, or self pick-up.</p>
+  </div>
+</div>
+
+<footer>
+  UCOP SPIKES — Built for the start line. Payment via bank transfer / QR · Worldwide shipping · Lalamove · Self pick-up
+</footer>
+
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <button class="modal-close" id="modalClose">&times;</button>
+    <div class="modal-gallery">
+      <div class="main"><img id="mainImg" src="" alt=""></div>
+      <div class="modal-thumbs" id="thumbs"></div>
+    </div>
+    <div class="modal-body">
+      <div class="cat" id="mCat"></div>
+      <h2 id="mName"></h2>
+      <div class="price" id="mPrice"></div>
+      <p class="desc" id="mDesc"></p>
+      <div class="color-label">Colour — <span class="current" id="mColorName"></span></div>
+      <div class="colors" id="mColors"></div>
+      <div class="size-label">
+        <span>Select your size (UK)</span>
+        <button type="button" class="size-guide-link" id="modalSizeGuide">Size Guide</button>
+      </div>
+      <div class="sizes" id="mSizes"></div>
+      <div class="note">Sizes shown are for reference. Every pair is hand-checked for availability before your order is confirmed — tap below to check yours on WhatsApp.</div>
+      <a href="#" target="_blank" class="whatsapp-btn disabled" id="waBtn">Select a size first</a>
+      <a href="#" id="placeOrderLink" style="display:block; text-align:center; margin-top:12px; font-family:'Space Mono',monospace; font-size:11.5px; letter-spacing:.05em; text-transform:uppercase; color:var(--steel); text-decoration:underline;">Already confirmed on WhatsApp? Place your order →</a>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="sgOverlay">
+  <div class="sg-modal">
+    <button class="modal-close" id="sgClose">&times;</button>
+    <h3>Size Guide</h3>
+    <div class="sub">UK / EU / US / CM conversion — track spikes generally run true to size.</div>
+    <table class="sg-table">
+      <thead>
+        <tr><th>UK</th><th>EU</th><th>US (M)</th><th>CM</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>6</td><td>39.5</td><td>6.5</td><td>24.5</td></tr>
+        <tr><td>6.5</td><td>40</td><td>7</td><td>25</td></tr>
+        <tr><td>7</td><td>40.5</td><td>7.5</td><td>25.5</td></tr>
+        <tr><td>7.5</td><td>41.5</td><td>8</td><td>26</td></tr>
+        <tr><td>8</td><td>42</td><td>8.5</td><td>26.5</td></tr>
+        <tr><td>8.5</td><td>42.5</td><td>9</td><td>27</td></tr>
+        <tr><td>9</td><td>43.5</td><td>9.5</td><td>27.5</td></tr>
+        <tr><td>9.5</td><td>44</td><td>10</td><td>28</td></tr>
+        <tr><td>10</td><td>44.5</td><td>10.5</td><td>28.5</td></tr>
+      </tbody>
+    </table>
+    <div class="sg-note">Sizes above are a reference guide only. Confirm your exact fit with us on WhatsApp before ordering — availability is hand-checked per pair.</div>
+  </div>
+</div>
+
+<script>
+  // ---- CONFIG ----
+  const WHATSAPP_NUMBER = "601126103958"; // Ucop Spikes WhatsApp: +60 11-2610 3958
+
+  // ---- PRODUCT DATA (edit / add products here) ----
+  const PRODUCTS = [
+    {
+      id: "adizero-prime-sp3",
+      name: "Adizero Prime SP 3",
+      category: "sprint",
+      categoryLabel: "Sprint / Short Distance",
+      price: "RM 799",
+      desc: "Lightweight sprint spike built on a rigid carbon-infused plate with Lightstrike Pro cushioning for explosive starts and top-end speed.",
+      sizes: ["UK6","UK6.5","UK7","UK7.5","UK8","UK8.5","UK9","UK9.5","UK10"],
+      colors: [
+        {
+          name: "Cloud White / Core Black / Lucid Red",
+          swatch: "#F3F3EF",
+          images: ["assets/adidas_r.jpeg", "assets/adidas_l.jpeg", "assets/adidas_top.jpeg", "assets/adidas_bottom.jpeg"]
+        },
+        {
+          name: "Cobalt Blue / Zero Metallic / Lucid Lemon",
+          swatch: "#4B3F9E",
+          images: ["assets/blue_r.jpg", "assets/blue_l.jpg", "assets/blue.jpg", "assets/blue_b.jpg"]
+        },
+        {
+          name: "Lucid Lemon / Core Black / Halo Silver",
+          swatch: "#CFFF3D",
+          images: ["assets/green_r.jpg", "assets/green_t.jpg", "assets/green.jpg", "assets/green_b.jpg"]
+        }
+      ]
+    }
+  ];
+
+  const grid = document.getElementById('catalog-grid');
+
+  function renderGrid(filter){
+    grid.innerHTML = "";
+    const list = filter === "all" ? PRODUCTS : PRODUCTS.filter(p => p.category === filter);
+    list.forEach((p, i) => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      const swatchesHtml = p.colors.map((c, ci) =>
+        `<div class="swatch ${ci===0?'active':''}" data-ci="${ci}" style="background:${c.swatch}" title="${c.name}"></div>`
+      ).join('');
+      card.innerHTML = `
+        <div class="bib">NO. ${String(i+1).padStart(3,'0')}</div>
+        <div class="frame"><img class="cardImg" src="${p.colors[0].images[0]}" alt="${p.name}"></div>
+        <div class="info">
+          <div class="cat">${p.categoryLabel}</div>
+          <h3>${p.name}</h3>
+          <div class="row">
+            <span class="price">${p.price}</span>
+            <span class="check">Check <b>availability</b></span>
+          </div>
+          <div class="swatches">${swatchesHtml}</div>
+        </div>`;
+      // clicking a swatch previews that colour's thumbnail without opening the modal
+      card.querySelectorAll('.swatch').forEach(sw => {
+        sw.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const ci = +sw.dataset.ci;
+          card.querySelector('.cardImg').src = p.colors[ci].images[0];
+          card.querySelectorAll('.swatch').forEach(x=>x.classList.remove('active'));
+          sw.classList.add('active');
+          card.dataset.selectedColor = ci;
+        });
+      });
+      card.addEventListener('click', () => openModal(p, +(card.dataset.selectedColor || 0)));
+      grid.appendChild(card);
+    });
+  }
+
+  document.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      renderGrid(chip.dataset.filter);
+    });
+  });
+
+  // ---- MODAL ----
+  const overlay = document.getElementById('overlay');
+  const mainImg = document.getElementById('mainImg');
+  const thumbs = document.getElementById('thumbs');
+  const waBtn = document.getElementById('waBtn');
+  let selectedSize = null;
+  let selectedColorIdx = 0;
+  let currentProduct = null;
+
+  function openModal(p, startColorIdx){
+    currentProduct = p;
+    selectedSize = null;
+    selectedColorIdx = startColorIdx || 0;
+    document.getElementById('mCat').textContent = p.categoryLabel;
+    document.getElementById('mName').textContent = p.name;
+    document.getElementById('mPrice').textContent = p.price;
+    document.getElementById('mDesc').textContent = p.desc;
+
+    const colorsWrap = document.getElementById('mColors');
+    colorsWrap.innerHTML = "";
+    p.colors.forEach((c, ci) => {
+      const sw = document.createElement('div');
+      sw.className = 'color-swatch' + (ci === selectedColorIdx ? ' selected' : '');
+      sw.style.background = c.swatch;
+      sw.title = c.name;
+      sw.addEventListener('click', () => {
+        selectedColorIdx = ci;
+        colorsWrap.querySelectorAll('.color-swatch').forEach(x=>x.classList.remove('selected'));
+        sw.classList.add('selected');
+        loadGallery(p.colors[ci]);
+        document.getElementById('mColorName').textContent = c.name;
+        updateWaBtn();
+      });
+      colorsWrap.appendChild(sw);
+    });
+    document.getElementById('mColorName').textContent = p.colors[selectedColorIdx].name;
+    loadGallery(p.colors[selectedColorIdx]);
+
+    const sizesWrap = document.getElementById('mSizes');
+    sizesWrap.innerHTML = "";
+    p.sizes.forEach(sz => {
+      const s = document.createElement('button');
+      s.className = 'size';
+      s.textContent = sz;
+      s.addEventListener('click', () => {
+        sizesWrap.querySelectorAll('.size').forEach(x=>x.classList.remove('selected'));
+        s.classList.add('selected');
+        selectedSize = sz;
+        updateWaBtn();
+      });
+      sizesWrap.appendChild(s);
+    });
+
+    updateWaBtn();
+    overlay.classList.add('open');
+  }
+
+  function loadGallery(color){
+    mainImg.src = color.images[0];
+    thumbs.innerHTML = "";
+    color.images.forEach((src, idx) => {
+      const t = document.createElement('img');
+      t.src = src;
+      if(idx===0) t.classList.add('active');
+      t.addEventListener('click', () => {
+        mainImg.src = src;
+        thumbs.querySelectorAll('img').forEach(x=>x.classList.remove('active'));
+        t.classList.add('active');
+      });
+      thumbs.appendChild(t);
+    });
+  }
+
+  function updateWaBtn(){
+    if(selectedSize && currentProduct){
+      const colorName = currentProduct.colors[selectedColorIdx].name;
+      const msg = `Hi Ucop Spikes! I want to check availability for:%0A` +
+                  `Product: ${currentProduct.name}%0A` +
+                  `Colour: ${colorName}%0A` +
+                  `Size: ${selectedSize}%0A` +
+                  `Is this in stock?`;
+      waBtn.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
+      waBtn.textContent = "Check availability on WhatsApp";
+      waBtn.classList.remove('disabled');
+      document.getElementById('placeOrderLink').href =
+        `order.html?colour=${encodeURIComponent(colorName)}&size=${encodeURIComponent(selectedSize)}`;
+    } else {
+      waBtn.href = "#";
+      waBtn.textContent = "Select a size first";
+      waBtn.classList.add('disabled');
+      document.getElementById('placeOrderLink').href = "order.html";
+    }
+  }
+
+  document.getElementById('modalClose').addEventListener('click', () => overlay.classList.remove('open'));
+  overlay.addEventListener('click', (e) => { if(e.target === overlay) overlay.classList.remove('open'); });
+
+  // ---- SIZE GUIDE ----
+  const sgOverlay = document.getElementById('sgOverlay');
+  function openSizeGuide(){ sgOverlay.classList.add('open'); }
+  document.getElementById('navSizeGuide').addEventListener('click', (e) => { e.preventDefault(); openSizeGuide(); });
+  document.getElementById('modalSizeGuide').addEventListener('click', openSizeGuide);
+  document.getElementById('sgClose').addEventListener('click', () => sgOverlay.classList.remove('open'));
+  sgOverlay.addEventListener('click', (e) => { if(e.target === sgOverlay) sgOverlay.classList.remove('open'); });
+
+  renderGrid('all');
+</script>
+
+</body>
+</html>

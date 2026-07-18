@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UCOP SPIKES — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0B0D12; --ink-soft:#171A21; --cloud:#F3F3EF; --cloud-dim:#E7E7E1;
+    --track-red:#FF3B30; --volt:#C6FF3D; --steel:#8B92A0; --steel-line:#2A2E38;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{ background:var(--ink); color:var(--cloud); font-family:'Inter',sans-serif; -webkit-font-smoothing:antialiased; }
+  h1,h2{ font-family:'Oswald',sans-serif; font-style:italic; text-transform:uppercase; }
+
+  /* ---- LOGIN ---- */
+  #loginScreen{
+    min-height:100vh; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:16px;
+  }
+  #loginScreen input{
+    background:var(--ink-soft); border:1px solid var(--steel-line); color:var(--cloud);
+    padding:14px 16px; font-family:'Space Mono',monospace; font-size:14px; width:260px; outline:none;
+  }
+  #loginScreen input:focus{ border-color:var(--volt); }
+  #loginScreen button{
+    background:var(--track-red); color:var(--ink); border:none; padding:14px 30px;
+    font-family:'Space Mono',monospace; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+    cursor:pointer;
+  }
+  #loginScreen button:hover{ background:var(--volt); }
+  #loginError{ color:var(--track-red); font-family:'Space Mono',monospace; font-size:12px; display:none; }
+
+  /* ---- DASHBOARD ---- */
+  #dashboard{ display:none; padding:30px 4vw 80px; }
+  #dashboard.show{ display:block; }
+  .top{ display:flex; justify-content:space-between; align-items:center; margin-bottom:26px; flex-wrap:wrap; gap:14px; }
+  .top h1{ font-size:28px; }
+  #refreshBtn, #logoutBtn{
+    background:var(--ink-soft); border:1px solid var(--steel-line); color:var(--cloud);
+    padding:10px 18px; font-family:'Space Mono',monospace; font-size:11.5px; letter-spacing:.06em;
+    text-transform:uppercase; cursor:pointer; margin-left:8px;
+  }
+  #refreshBtn:hover, #logoutBtn:hover{ border-color:var(--volt); color:var(--volt); }
+
+  .stats{ display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:14px; margin-bottom:28px; }
+  .stat-card{ background:var(--ink-soft); border:1px solid var(--steel-line); padding:18px; }
+  .stat-card .label{ font-family:'Space Mono',monospace; font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--steel); margin-bottom:8px; }
+  .stat-card .val{ font-family:'Space Mono',monospace; font-size:24px; font-weight:700; color:var(--volt); }
+
+  .filters{ display:flex; gap:10px; margin-bottom:18px; flex-wrap:wrap; align-items:center; }
+  .filters select, .filters input{
+    background:var(--ink-soft); border:1px solid var(--steel-line); color:var(--cloud);
+    padding:9px 12px; font-family:'Space Mono',monospace; font-size:12px;
+  }
+
+  table{ width:100%; border-collapse:collapse; font-size:13px; }
+  thead th{
+    font-family:'Space Mono',monospace; font-size:10px; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--volt); text-align:left; padding:10px 8px; border-bottom:1px solid var(--steel-line);
+    white-space:nowrap;
+  }
+  tbody td{ padding:10px 8px; border-bottom:1px solid rgba(255,255,255,.06); vertical-align:top; }
+  tbody tr:hover{ background:rgba(198,255,61,.03); }
+  .status-select{
+    background:var(--ink-soft); border:1px solid var(--steel-line); color:var(--cloud);
+    padding:6px 8px; font-family:'Space Mono',monospace; font-size:11px;
+  }
+  .proof-link{ color:var(--track-red); font-size:11px; }
+  .print-btn{
+    background:none; border:1px solid var(--steel-line); color:var(--cloud);
+    padding:6px 10px; font-family:'Space Mono',monospace; font-size:10.5px; cursor:pointer;
+  }
+  .print-btn:hover{ border-color:var(--volt); color:var(--volt); }
+  .table-wrap{ overflow-x:auto; background:var(--ink-soft); border:1px solid var(--steel-line); }
+
+  /* ---- PRINT RECEIPT ---- */
+  #receiptPrint{ display:none; }
+  @media print{
+    body *{ visibility:hidden; }
+    #receiptPrint, #receiptPrint *{ visibility:visible; }
+    #receiptPrint{ display:block; position:absolute; top:0; left:0; width:100%; padding:30px; color:#000; }
+    #receiptPrint .r-logo{ font-size:22px; font-weight:700; margin-bottom:4px; }
+    #receiptPrint table{ width:100%; margin-top:16px; }
+    #receiptPrint td{ padding:6px 0; border-bottom:1px solid #ccc; color:#000; }
+  }
+</style>
+</head>
+<body>
+
+<div id="loginScreen">
+  <div class="eyebrow" style="font-family:'Space Mono',monospace; color:var(--volt); letter-spacing:.1em; font-size:12px;">UCOP SPIKES — ADMIN</div>
+  <h1 style="font-size:26px;">Staff Login</h1>
+  <input type="password" id="passwordInput" placeholder="Admin password">
+  <button id="loginBtn">Enter</button>
+  <div id="loginError">Wrong password. Try again.</div>
+</div>
+
+<div id="dashboard">
+  <div class="top">
+    <h1>Order Dashboard</h1>
+    <div>
+      <button id="refreshBtn">Refresh</button>
+      <button id="logoutBtn">Log Out</button>
+    </div>
+  </div>
+
+  <div class="stats" id="statsRow"></div>
+
+  <div class="filters">
+    <select id="statusFilter">
+      <option value="">All Statuses</option>
+      <option>Pending Payment Verification</option>
+      <option>Payment Verified</option>
+      <option>Processing</option>
+      <option>Shipped</option>
+      <option>Completed</option>
+      <option>Cancelled</option>
+    </select>
+    <input type="text" id="searchBox" placeholder="Search name / phone / order ID">
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Order ID</th><th>Date</th><th>Customer</th><th>Phone</th><th>Product</th>
+          <th>Colour</th><th>Size</th><th>Qty</th><th>Total</th><th>Delivery</th>
+          <th>Payment</th><th>Proof</th><th>Status</th><th>Print</th>
+        </tr>
+      </thead>
+      <tbody id="ordersBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<div id="receiptPrint">
+  <div class="r-logo">UCOP SPIKES</div>
+  <div>Official Order Receipt</div>
+  <table id="receiptTable"></table>
+</div>
+
+<script>
+  const API_URL = "https://script.google.com/macros/s/AKfycbwULdxGtDe3xgVd51vBhssLJg008FYsl5QXoVAVVG7Ajirg_-GLMbGk0xQAKaT7moKm/exec"; // TODO — same URL as order.html
+
+  let PASSWORD = sessionStorage.getItem('ucop_admin_pw') || "";
+  let ORDERS = [];
+
+  const loginScreen = document.getElementById('loginScreen');
+  const dashboard = document.getElementById('dashboard');
+
+  async function tryLogin(pw){
+    if (!API_URL || !API_URL.startsWith('http')) {
+      alert('Admin not connected yet — API_URL not set in this file.');
+      return false;
+    }
+    const res = await fetch(`${API_URL}?action=getOrders&password=${encodeURIComponent(pw)}`);
+    const data = await res.json();
+    if (data.success) {
+      PASSWORD = pw;
+      sessionStorage.setItem('ucop_admin_pw', pw);
+      ORDERS = data.orders;
+      showDashboard();
+      return true;
+    }
+    return false;
+  }
+
+  document.getElementById('loginBtn').addEventListener('click', async () => {
+    const pw = document.getElementById('passwordInput').value;
+    const ok = await tryLogin(pw);
+    if (!ok) document.getElementById('loginError').style.display = 'block';
+  });
+  document.getElementById('passwordInput').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') document.getElementById('loginBtn').click();
+  });
+
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    sessionStorage.removeItem('ucop_admin_pw');
+    location.reload();
+  });
+
+  document.getElementById('refreshBtn').addEventListener('click', () => loadOrders());
+
+  function showDashboard(){
+    loginScreen.style.display = 'none';
+    dashboard.classList.add('show');
+    renderStats();
+    renderTable();
+  }
+
+  async function loadOrders(){
+    const res = await fetch(`${API_URL}?action=getOrders&password=${encodeURIComponent(PASSWORD)}`);
+    const data = await res.json();
+    if (data.success) {
+      ORDERS = data.orders;
+      renderStats();
+      renderTable();
+    }
+  }
+
+  function renderStats(){
+    const total = ORDERS.length;
+    const revenue = ORDERS.reduce((sum, o) => sum + (parseFloat(o["Total Price (RM)"]) || 0), 0);
+    const pending = ORDERS.filter(o => o.Status === "Pending Payment Verification").length;
+    const completed = ORDERS.filter(o => o.Status === "Completed").length;
+
+    document.getElementById('statsRow').innerHTML = `
+      <div class="stat-card"><div class="label">Total Orders</div><div class="val">${total}</div></div>
+      <div class="stat-card"><div class="label">Total Revenue</div><div class="val">RM ${revenue.toFixed(0)}</div></div>
+      <div class="stat-card"><div class="label">Pending Verification</div><div class="val">${pending}</div></div>
+      <div class="stat-card"><div class="label">Completed</div><div class="val">${completed}</div></div>
+    `;
+  }
+
+  const STATUSES = ["Pending Payment Verification","Payment Verified","Processing","Shipped","Completed","Cancelled"];
+
+  function renderTable(){
+    const statusFilter = document.getElementById('statusFilter').value;
+    const search = document.getElementById('searchBox').value.toLowerCase();
+    const tbody = document.getElementById('ordersBody');
+    tbody.innerHTML = "";
+
+    let list = ORDERS.slice().reverse(); // newest first
+    if (statusFilter) list = list.filter(o => o.Status === statusFilter);
+    if (search) list = list.filter(o =>
+      (o["Order ID"]||"").toLowerCase().includes(search) ||
+      (o["Customer Name"]||"").toLowerCase().includes(search) ||
+      (o["Phone"]||"").toLowerCase().includes(search)
+    );
+
+    list.forEach(o => {
+      const tr = document.createElement('tr');
+      const date = o.Timestamp ? new Date(o.Timestamp).toLocaleDateString('en-MY', {day:'2-digit',month:'short',year:'numeric'}) : "";
+      const statusOptions = STATUSES.map(s => `<option ${s===o.Status?'selected':''}>${s}</option>`).join('');
+      tr.innerHTML = `
+        <td>${o["Order ID"]}</td>
+        <td>${date}</td>
+        <td>${o["Customer Name"]}</td>
+        <td>${o["Phone"]}</td>
+        <td>${o["Product"]}</td>
+        <td>${o["Colour"]}</td>
+        <td>${o["Size"]}</td>
+        <td>${o["Qty"]}</td>
+        <td>RM ${o["Total Price (RM)"]}</td>
+        <td>${o["Delivery Method"]}</td>
+        <td>${o["Payment Method"]}</td>
+        <td>${o["Payment Proof"] ? `<a class="proof-link" href="${o["Payment Proof"]}" target="_blank">View</a>` : "-"}</td>
+        <td><select class="status-select" data-row="${o._row}">${statusOptions}</select></td>
+        <td><button class="print-btn" data-idx="${ORDERS.indexOf(o)}">Print</button></td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    tbody.querySelectorAll('.status-select').forEach(sel => {
+      sel.addEventListener('change', async () => {
+        const row = sel.dataset.row;
+        await fetch(API_URL, {
+          method: 'POST',
+          body: JSON.stringify({ action: "updateStatus", password: PASSWORD, row: parseInt(row), status: sel.value })
+        });
+        const order = ORDERS.find(o => o._row == row);
+        if (order) order.Status = sel.value;
+        renderStats();
+      });
+    });
+
+    tbody.querySelectorAll('.print-btn').forEach(btn => {
+      btn.addEventListener('click', () => printReceipt(ORDERS[btn.dataset.idx]));
+    });
+  }
+
+  document.getElementById('statusFilter').addEventListener('change', renderTable);
+  document.getElementById('searchBox').addEventListener('input', renderTable);
+
+  function printReceipt(o){
+    const date = o.Timestamp ? new Date(o.Timestamp).toLocaleString('en-MY') : "";
+    document.getElementById('receiptTable').innerHTML = `
+      <tr><td><b>Order ID</b></td><td>${o["Order ID"]}</td></tr>
+      <tr><td><b>Date</b></td><td>${date}</td></tr>
+      <tr><td><b>Customer</b></td><td>${o["Customer Name"]}</td></tr>
+      <tr><td><b>Phone</b></td><td>${o["Phone"]}</td></tr>
+      <tr><td><b>Product</b></td><td>${o["Product"]}</td></tr>
+      <tr><td><b>Colour</b></td><td>${o["Colour"]}</td></tr>
+      <tr><td><b>Size</b></td><td>${o["Size"]}</td></tr>
+      <tr><td><b>Qty</b></td><td>${o["Qty"]}</td></tr>
+      <tr><td><b>Total</b></td><td>RM ${o["Total Price (RM)"]}</td></tr>
+      <tr><td><b>Delivery Method</b></td><td>${o["Delivery Method"]}</td></tr>
+      <tr><td><b>Address / Notes</b></td><td>${o["Address / Notes"]}</td></tr>
+      <tr><td><b>Payment Method</b></td><td>${o["Payment Method"]}</td></tr>
+      <tr><td><b>Status</b></td><td>${o["Status"]}</td></tr>
+    `;
+    window.print();
+  }
+
+  // auto-login if password already in session
+  if (PASSWORD) {
+    tryLogin(PASSWORD).then(ok => { if (!ok) sessionStorage.removeItem('ucop_admin_pw'); });
+  }
+</script>
+
+</body>
+</html>
