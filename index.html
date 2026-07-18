@@ -258,6 +258,15 @@
     letter-spacing:.06em; text-transform:uppercase;
   }
   .card .info .check b{ color:var(--volt); }
+  .card .swatches{ display:flex; gap:7px; margin-top:12px; }
+  .card .swatch{
+    width:18px; height:18px; border-radius:50%;
+    border:1px solid rgba(255,255,255,.25);
+    cursor:pointer; position:relative;
+    transition:transform .15s;
+  }
+  .card .swatch.active{ box-shadow:0 0 0 2px var(--ink-soft), 0 0 0 3px var(--volt); }
+  .card .swatch:hover{ transform:scale(1.12); }
 
   /* ===== MODAL ===== */
   .overlay{
@@ -302,10 +311,30 @@
   .modal-body .desc{
     font-size:14px; color:var(--steel); line-height:1.6; margin-bottom:24px;
   }
+  .color-label{
+    font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--steel); margin-bottom:10px;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .color-label .current{ color:var(--volt); text-transform:none; letter-spacing:0; }
+  .colors{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom:22px; }
+  .color-swatch{
+    width:32px; height:32px; border-radius:50%;
+    border:1px solid rgba(255,255,255,.25);
+    cursor:pointer; transition:all .15s;
+  }
+  .color-swatch.selected{ box-shadow:0 0 0 2px var(--ink-soft), 0 0 0 4px var(--volt); }
   .size-label{
     font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.1em;
     text-transform:uppercase; color:var(--steel); margin-bottom:10px;
+    display:flex; justify-content:space-between; align-items:center;
   }
+  .size-guide-link{
+    font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.05em;
+    text-transform:none; color:var(--track-red); text-decoration:underline;
+    cursor:pointer; background:none; border:none; padding:0;
+  }
+  .size-guide-link:hover{ color:var(--volt); }
   .sizes{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:26px; }
   .size{
     min-width:44px; padding:9px 6px; text-align:center;
@@ -334,6 +363,33 @@
     .modal{ grid-template-columns:1fr; }
   }
 
+  /* ===== SIZE GUIDE ===== */
+  .sg-modal{
+    background:var(--ink-soft); border:1px solid var(--steel-line);
+    max-width:520px; width:100%; position:relative;
+    padding:32px 28px;
+  }
+  .sg-modal h3{ font-size:26px; color:var(--cloud); margin-bottom:6px; }
+  .sg-modal .sub{
+    font-family:'Space Mono',monospace; font-size:11.5px; color:var(--steel);
+    margin-bottom:20px;
+  }
+  .sg-table{ width:100%; border-collapse:collapse; }
+  .sg-table th{
+    font-family:'Space Mono',monospace; font-size:10.5px; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--volt); text-align:left;
+    padding:9px 8px; border-bottom:1px solid var(--steel-line);
+  }
+  .sg-table td{
+    font-family:'Space Mono',monospace; font-size:13px; color:var(--cloud);
+    padding:8px; border-bottom:1px solid rgba(255,255,255,.06);
+  }
+  .sg-table tr:hover td{ background:rgba(198,255,61,.05); }
+  .sg-note{
+    margin-top:16px; font-size:12px; color:var(--steel); line-height:1.55;
+    border-left:2px solid var(--track-red); padding-left:12px;
+  }
+
   /* ===== INFO STRIP ===== */
   .info-strip{
     border-top:1px solid var(--steel-line);
@@ -360,6 +416,7 @@
   </div>
   <div class="navlinks">
     <a href="#catalog">Catalog</a>
+    <a href="#" id="navSizeGuide">Size Guide</a>
     <a href="#how">How To Order</a>
     <a href="https://wa.me/601126103958" target="_blank" class="cta">WhatsApp Us</a>
   </div>
@@ -426,11 +483,41 @@
       <h2 id="mName"></h2>
       <div class="price" id="mPrice"></div>
       <p class="desc" id="mDesc"></p>
-      <div class="size-label">Select your size (UK)</div>
+      <div class="color-label">Colour — <span class="current" id="mColorName"></span></div>
+      <div class="colors" id="mColors"></div>
+      <div class="size-label">
+        <span>Select your size (UK)</span>
+        <button type="button" class="size-guide-link" id="modalSizeGuide">Size Guide</button>
+      </div>
       <div class="sizes" id="mSizes"></div>
       <div class="note">Sizes shown are for reference. Every pair is hand-checked for availability before your order is confirmed — tap below to check yours on WhatsApp.</div>
       <a href="#" target="_blank" class="whatsapp-btn disabled" id="waBtn">Select a size first</a>
     </div>
+  </div>
+</div>
+
+<div class="overlay" id="sgOverlay">
+  <div class="sg-modal">
+    <button class="modal-close" id="sgClose">&times;</button>
+    <h3>Size Guide</h3>
+    <div class="sub">UK / EU / US / CM conversion — track spikes generally run true to size.</div>
+    <table class="sg-table">
+      <thead>
+        <tr><th>UK</th><th>EU</th><th>US (M)</th><th>CM</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>6</td><td>39.5</td><td>6.5</td><td>24.5</td></tr>
+        <tr><td>6.5</td><td>40</td><td>7</td><td>25</td></tr>
+        <tr><td>7</td><td>40.5</td><td>7.5</td><td>25.5</td></tr>
+        <tr><td>7.5</td><td>41.5</td><td>8</td><td>26</td></tr>
+        <tr><td>8</td><td>42</td><td>8.5</td><td>26.5</td></tr>
+        <tr><td>8.5</td><td>42.5</td><td>9</td><td>27</td></tr>
+        <tr><td>9</td><td>43.5</td><td>9.5</td><td>27.5</td></tr>
+        <tr><td>9.5</td><td>44</td><td>10</td><td>28</td></tr>
+        <tr><td>10</td><td>44.5</td><td>10.5</td><td>28.5</td></tr>
+      </tbody>
+    </table>
+    <div class="sg-note">Sizes above are a reference guide only. Confirm your exact fit with us on WhatsApp before ordering — availability is hand-checked per pair.</div>
   </div>
 </div>
 
@@ -447,9 +534,24 @@
       categoryLabel: "Sprint / Short Distance",
       price: "RM 799",
       desc: "Lightweight sprint spike built on a rigid carbon-infused plate with Lightstrike Pro cushioning for explosive starts and top-end speed.",
-      thumb: "assets/adidas_r.jpeg",
-      images: ["assets/adidas_r.jpeg", "assets/adidas_l.jpeg", "assets/adidas_top.jpeg", "assets/adidas_bottom.jpeg"],
-      sizes: ["UK6","UK6.5","UK7","UK7.5","UK8","UK8.5","UK9","UK9.5","UK10"]
+      sizes: ["UK6","UK6.5","UK7","UK7.5","UK8","UK8.5","UK9","UK9.5","UK10"],
+      colors: [
+        {
+          name: "Cloud White / Core Black / Lucid Red",
+          swatch: "#F3F3EF",
+          images: ["assets/adidas_r.jpeg", "assets/adidas_l.jpeg", "assets/adidas_top.jpeg", "assets/adidas_bottom.jpeg"]
+        },
+        {
+          name: "Cobalt Blue / Zero Metallic / Lucid Lemon",
+          swatch: "#4B3F9E",
+          images: ["assets/blue_r.jpg", "assets/blue_l.jpg", "assets/blue.jpg", "assets/blue_b.jpg"]
+        },
+        {
+          name: "Lucid Lemon / Core Black / Halo Silver",
+          swatch: "#CFFF3D",
+          images: ["assets/green_r.jpg", "assets/green_t.jpg", "assets/green.jpg", "assets/green_b.jpg"]
+        }
+      ]
     }
   ];
 
@@ -461,9 +563,12 @@
     list.forEach((p, i) => {
       const card = document.createElement('div');
       card.className = 'card';
+      const swatchesHtml = p.colors.map((c, ci) =>
+        `<div class="swatch ${ci===0?'active':''}" data-ci="${ci}" style="background:${c.swatch}" title="${c.name}"></div>`
+      ).join('');
       card.innerHTML = `
         <div class="bib">NO. ${String(i+1).padStart(3,'0')}</div>
-        <div class="frame"><img src="${p.thumb}" alt="${p.name}"></div>
+        <div class="frame"><img class="cardImg" src="${p.colors[0].images[0]}" alt="${p.name}"></div>
         <div class="info">
           <div class="cat">${p.categoryLabel}</div>
           <h3>${p.name}</h3>
@@ -471,8 +576,20 @@
             <span class="price">${p.price}</span>
             <span class="check">Check <b>availability</b></span>
           </div>
+          <div class="swatches">${swatchesHtml}</div>
         </div>`;
-      card.addEventListener('click', () => openModal(p));
+      // clicking a swatch previews that colour's thumbnail without opening the modal
+      card.querySelectorAll('.swatch').forEach(sw => {
+        sw.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const ci = +sw.dataset.ci;
+          card.querySelector('.cardImg').src = p.colors[ci].images[0];
+          card.querySelectorAll('.swatch').forEach(x=>x.classList.remove('active'));
+          sw.classList.add('active');
+          card.dataset.selectedColor = ci;
+        });
+      });
+      card.addEventListener('click', () => openModal(p, +(card.dataset.selectedColor || 0)));
       grid.appendChild(card);
     });
   }
@@ -491,29 +608,37 @@
   const thumbs = document.getElementById('thumbs');
   const waBtn = document.getElementById('waBtn');
   let selectedSize = null;
+  let selectedColorIdx = 0;
   let currentProduct = null;
 
-  function openModal(p){
+  function openModal(p, startColorIdx){
     currentProduct = p;
     selectedSize = null;
+    selectedColorIdx = startColorIdx || 0;
     document.getElementById('mCat').textContent = p.categoryLabel;
     document.getElementById('mName').textContent = p.name;
     document.getElementById('mPrice').textContent = p.price;
     document.getElementById('mDesc').textContent = p.desc;
-    mainImg.src = p.images[0];
 
-    thumbs.innerHTML = "";
-    p.images.forEach((src, idx) => {
-      const t = document.createElement('img');
-      t.src = src;
-      if(idx===0) t.classList.add('active');
-      t.addEventListener('click', () => {
-        mainImg.src = src;
-        thumbs.querySelectorAll('img').forEach(x=>x.classList.remove('active'));
-        t.classList.add('active');
+    const colorsWrap = document.getElementById('mColors');
+    colorsWrap.innerHTML = "";
+    p.colors.forEach((c, ci) => {
+      const sw = document.createElement('div');
+      sw.className = 'color-swatch' + (ci === selectedColorIdx ? ' selected' : '');
+      sw.style.background = c.swatch;
+      sw.title = c.name;
+      sw.addEventListener('click', () => {
+        selectedColorIdx = ci;
+        colorsWrap.querySelectorAll('.color-swatch').forEach(x=>x.classList.remove('selected'));
+        sw.classList.add('selected');
+        loadGallery(p.colors[ci]);
+        document.getElementById('mColorName').textContent = c.name;
+        updateWaBtn();
       });
-      thumbs.appendChild(t);
+      colorsWrap.appendChild(sw);
     });
+    document.getElementById('mColorName').textContent = p.colors[selectedColorIdx].name;
+    loadGallery(p.colors[selectedColorIdx]);
 
     const sizesWrap = document.getElementById('mSizes');
     sizesWrap.innerHTML = "";
@@ -534,10 +659,28 @@
     overlay.classList.add('open');
   }
 
+  function loadGallery(color){
+    mainImg.src = color.images[0];
+    thumbs.innerHTML = "";
+    color.images.forEach((src, idx) => {
+      const t = document.createElement('img');
+      t.src = src;
+      if(idx===0) t.classList.add('active');
+      t.addEventListener('click', () => {
+        mainImg.src = src;
+        thumbs.querySelectorAll('img').forEach(x=>x.classList.remove('active'));
+        t.classList.add('active');
+      });
+      thumbs.appendChild(t);
+    });
+  }
+
   function updateWaBtn(){
     if(selectedSize && currentProduct){
+      const colorName = currentProduct.colors[selectedColorIdx].name;
       const msg = `Hi Ucop Spikes! I want to check availability for:%0A` +
                   `Product: ${currentProduct.name}%0A` +
+                  `Colour: ${colorName}%0A` +
                   `Size: ${selectedSize}%0A` +
                   `Is this in stock?`;
       waBtn.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
@@ -552,6 +695,14 @@
 
   document.getElementById('modalClose').addEventListener('click', () => overlay.classList.remove('open'));
   overlay.addEventListener('click', (e) => { if(e.target === overlay) overlay.classList.remove('open'); });
+
+  // ---- SIZE GUIDE ----
+  const sgOverlay = document.getElementById('sgOverlay');
+  function openSizeGuide(){ sgOverlay.classList.add('open'); }
+  document.getElementById('navSizeGuide').addEventListener('click', (e) => { e.preventDefault(); openSizeGuide(); });
+  document.getElementById('modalSizeGuide').addEventListener('click', openSizeGuide);
+  document.getElementById('sgClose').addEventListener('click', () => sgOverlay.classList.remove('open'));
+  sgOverlay.addEventListener('click', (e) => { if(e.target === sgOverlay) sgOverlay.classList.remove('open'); });
 
   renderGrid('all');
 </script>
