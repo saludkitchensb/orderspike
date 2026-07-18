@@ -202,7 +202,7 @@
 
 <script>
   // ===== CONFIG =====
-  const API_URL = "https://script.google.com/macros/s/AKfycbwULdxGtDe3xgVd51vBhssLJg008FYsl5QXoVAVVG7Ajirg_-GLMbGk0xQAKaT7moKm/exec"; // TODO
+  const API_URL = "https://script.google.com/macros/s/AKfycbwULdxGtDe3xgVd51vBhssLJg008FYsl5QXoVAVVG7Ajirg_-GLMbGk0xQAKaT7moKm/exec";
   const WHATSAPP_NUMBER = "601126103958";
 
   // Keep this in sync with the catalog's PRODUCTS array
@@ -279,6 +279,8 @@
       }
     });
   });
+  // default to the first option (Worldwide Shipping) so the address field is visible right away
+  document.querySelector('#deliveryGroup .radio-option').click();
 
   // ---- payment method radio behaviour ----
   let SETTINGS = {};
