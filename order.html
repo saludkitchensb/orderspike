@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UCOP SPIKES — Place Order</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0B0D12; --ink-soft:#171A21; --cloud:#F3F3EF; --cloud-dim:#E7E7E1;
+    --track-red:#FF3B30; --volt:#C6FF3D; --steel:#8B92A0; --steel-line:#2A2E38;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{ background:var(--ink); color:var(--cloud); font-family:'Inter',sans-serif; -webkit-font-smoothing:antialiased; }
+  h1,h2,h3{ font-family:'Oswald',sans-serif; font-style:italic; text-transform:uppercase; }
+  .wrap{ max-width:640px; margin:0 auto; padding:40px 5vw 100px; }
+  .eyebrow{
+    font-family:'Space Mono',monospace; font-size:12px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--volt); display:flex; align-items:center; gap:10px; margin-bottom:14px;
+  }
+  .eyebrow::before{ content:""; width:18px; height:2px; background:var(--track-red); display:inline-block; }
+  h1{ font-size:clamp(30px,5vw,44px); margin-bottom:8px; }
+  .lead{ color:var(--steel); font-size:14px; margin-bottom:34px; line-height:1.6; }
+
+  .section{ margin-bottom:30px; }
+  .section-title{
+    font-family:'Space Mono',monospace; font-size:11.5px; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--cloud); margin-bottom:14px;
+    border-bottom:1px solid var(--steel-line); padding-bottom:10px;
+  }
+  label{
+    display:block; font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.06em;
+    text-transform:uppercase; color:var(--steel); margin-bottom:7px; margin-top:16px;
+  }
+  label:first-child{ margin-top:0; }
+  input[type=text], input[type=tel], input[type=number], select, textarea{
+    width:100%; background:var(--ink-soft); border:1px solid var(--steel-line);
+    color:var(--cloud); padding:13px 14px; font-family:'Inter',sans-serif; font-size:14px;
+    outline:none; transition:border-color .15s;
+  }
+  input:focus, select:focus, textarea:focus{ border-color:var(--volt); }
+  textarea{ resize:vertical; min-height:70px; }
+
+  .radio-group{ display:flex; flex-direction:column; gap:10px; }
+  .radio-option{
+    display:flex; align-items:flex-start; gap:10px; background:var(--ink-soft);
+    border:1px solid var(--steel-line); padding:13px 14px; cursor:pointer; transition:border-color .15s;
+  }
+  .radio-option:hover{ border-color:var(--steel); }
+  .radio-option.selected{ border-color:var(--volt); }
+  .radio-option input{ margin-top:3px; accent-color:var(--volt); width:auto; }
+  .radio-option .rtext b{ display:block; font-size:14px; color:var(--cloud); margin-bottom:3px; }
+  .radio-option .rtext span{ font-size:12.5px; color:var(--steel); }
+
+  .conditional{ display:none; margin-top:14px; padding:16px; background:rgba(198,255,61,.04); border-left:2px solid var(--volt); }
+  .conditional.show{ display:block; }
+
+  .payment-info{
+    margin-top:14px; padding:16px; background:var(--ink-soft); border:1px solid var(--steel-line);
+    font-family:'Space Mono',monospace; font-size:13px; line-height:1.8; display:none;
+  }
+  .payment-info.show{ display:block; }
+  .payment-info img{ max-width:180px; margin-top:10px; display:block; }
+
+  .row2{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media (max-width:500px){ .row2{ grid-template-columns:1fr; } }
+
+  .price-summary{
+    margin-top:20px; padding:18px; background:var(--ink-soft); border:1px solid var(--steel-line);
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .price-summary .total{ font-family:'Space Mono',monospace; font-weight:700; font-size:20px; color:var(--volt); }
+
+  .upload-box{
+    border:1px dashed var(--steel-line); padding:24px; text-align:center; cursor:pointer;
+    transition:border-color .15s; margin-top:8px;
+  }
+  .upload-box:hover{ border-color:var(--volt); }
+  .upload-box.has-file{ border-color:var(--volt); border-style:solid; }
+  .upload-box p{ font-size:12.5px; color:var(--steel); font-family:'Space Mono',monospace; }
+  #proofPreview{ max-width:160px; margin:12px auto 0; display:none; }
+
+  .submit-btn{
+    width:100%; margin-top:30px; background:var(--track-red); color:var(--ink);
+    border:none; padding:18px; font-family:'Space Mono',monospace; font-weight:700; font-size:14px;
+    letter-spacing:.08em; text-transform:uppercase; cursor:pointer; transition:background .2s;
+  }
+  .submit-btn:hover{ background:var(--volt); }
+  .submit-btn:disabled{ background:var(--steel-line); color:var(--steel); cursor:not-allowed; }
+
+  .confirm-box{
+    display:none; text-align:center; padding:50px 20px;
+  }
+  .confirm-box.show{ display:block; }
+  .confirm-box .oid{ font-family:'Space Mono',monospace; font-size:26px; color:var(--volt); margin:14px 0; }
+  .confirm-box p{ color:var(--steel); font-size:14px; line-height:1.7; margin-bottom:22px; }
+  .wa-confirm-btn{
+    display:inline-block; background:var(--track-red); color:var(--ink); text-decoration:none;
+    font-family:'Space Mono',monospace; font-weight:700; font-size:13px; letter-spacing:.06em;
+    text-transform:uppercase; padding:15px 28px;
+  }
+  #formSection.hide{ display:none; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="eyebrow">Order Form</div>
+  <h1>Lock in your pair.</h1>
+  <p class="lead">Fill this in after we've confirmed your size on WhatsApp. Payment is verified manually — you'll get a confirmation message once we've checked your proof.</p>
+
+  <div id="formSection">
+    <form id="orderForm">
+
+      <div class="section">
+        <div class="section-title">01 — Your Details</div>
+        <label>Full Name</label>
+        <input type="text" id="customerName" required>
+        <label>Phone Number (WhatsApp)</label>
+        <input type="tel" id="phone" placeholder="e.g. 0123456789" required>
+      </div>
+
+      <div class="section">
+        <div class="section-title">02 — Order Details</div>
+        <label>Product</label>
+        <select id="product" required></select>
+        <div class="row2">
+          <div>
+            <label>Colour</label>
+            <select id="colour" required></select>
+          </div>
+          <div>
+            <label>Size (UK)</label>
+            <select id="size" required></select>
+          </div>
+        </div>
+        <label>Quantity</label>
+        <input type="number" id="qty" value="1" min="1" required>
+        <div class="price-summary">
+          <span style="font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--steel);">Total</span>
+          <span class="total" id="totalDisplay">RM 0</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">03 — Delivery Method</div>
+        <div class="radio-group" id="deliveryGroup">
+          <label class="radio-option" data-value="Worldwide Shipping">
+            <input type="radio" name="delivery" value="Worldwide Shipping">
+            <span class="rtext"><b>Worldwide Shipping</b><span>International / nationwide post. Shipping cost quoted after order.</span></span>
+          </label>
+          <label class="radio-option" data-value="Lalamove (Local)">
+            <input type="radio" name="delivery" value="Lalamove (Local)">
+            <span class="rtext"><b>Lalamove (Local)</b><span>Same-day courier within the Klang Valley area.</span></span>
+          </label>
+          <label class="radio-option" data-value="Self Pick-up">
+            <input type="radio" name="delivery" value="Self Pick-up">
+            <span class="rtext"><b>Self Pick-up</b><span>Collect in person — location shared after order confirmation.</span></span>
+          </label>
+        </div>
+        <div class="conditional" id="addressBox">
+          <label>Delivery Address</label>
+          <textarea id="addressNotes" placeholder="Full address including postcode & country"></textarea>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">04 — Payment Method</div>
+        <div class="radio-group" id="paymentGroup">
+          <label class="radio-option" data-value="Bank Transfer">
+            <input type="radio" name="payment" value="Bank Transfer">
+            <span class="rtext"><b>Bank Transfer</b><span>Transfer to our account, upload your receipt below.</span></span>
+          </label>
+          <label class="radio-option" data-value="QR Payment">
+            <input type="radio" name="payment" value="QR Payment">
+            <span class="rtext"><b>QR Payment</b><span>Scan our DuitNow / TnG QR, upload your receipt below.</span></span>
+          </label>
+        </div>
+        <div class="payment-info" id="bankInfo"></div>
+        <div class="payment-info" id="qrInfo"></div>
+
+        <label>Upload Payment Proof</label>
+        <div class="upload-box" id="uploadBox">
+          <p id="uploadLabel">Tap to upload screenshot / photo of your payment receipt</p>
+          <img id="proofPreview">
+        </div>
+        <input type="file" id="proofFile" accept="image/*" style="display:none" required>
+      </div>
+
+      <button type="submit" class="submit-btn" id="submitBtn">Submit Order</button>
+    </form>
+  </div>
+
+  <div class="confirm-box" id="confirmBox">
+    <div class="eyebrow" style="justify-content:center">Order Received</div>
+    <h2>You're on the list.</h2>
+    <div class="oid" id="confirmOrderId"></div>
+    <p>We've received your order and payment proof. Our team will verify it and confirm via WhatsApp — usually within a few hours.</p>
+    <a href="#" id="waFollowUp" target="_blank" class="wa-confirm-btn">Message us on WhatsApp</a>
+  </div>
+</div>
+
+<script>
+  // ===== CONFIG =====
+  const API_URL = "PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE"; // TODO
+  const WHATSAPP_NUMBER = "601126103958";
+
+  // Keep this in sync with the catalog's PRODUCTS array
+  const PRODUCTS = [
+    {
+      name: "Adizero Prime SP 3",
+      price: 799,
+      colours: [
+        "Cloud White / Core Black / Lucid Red",
+        "Cobalt Blue / Zero Metallic / Lucid Lemon",
+        "Lucid Lemon / Core Black / Halo Silver"
+      ],
+      sizes: ["UK6","UK6.5","UK7","UK7.5","UK8","UK8.5","UK9","UK9.5","UK10"]
+    }
+  ];
+
+  // ---- populate product/colour/size dropdowns ----
+  const productSel = document.getElementById('product');
+  const colourSel = document.getElementById('colour');
+  const sizeSel = document.getElementById('size');
+  const qtyInput = document.getElementById('qty');
+  const totalDisplay = document.getElementById('totalDisplay');
+
+  PRODUCTS.forEach((p, i) => {
+    const opt = document.createElement('option');
+    opt.value = i; opt.textContent = `${p.name} — RM ${p.price}`;
+    productSel.appendChild(opt);
+  });
+
+  function refreshColourSize(){
+    const p = PRODUCTS[productSel.value];
+    colourSel.innerHTML = "";
+    p.colours.forEach(c => {
+      const o = document.createElement('option'); o.value = c; o.textContent = c; colourSel.appendChild(o);
+    });
+    sizeSel.innerHTML = "";
+    p.sizes.forEach(s => {
+      const o = document.createElement('option'); o.value = s; o.textContent = s; sizeSel.appendChild(o);
+    });
+    updateTotal();
+  }
+  function updateTotal(){
+    const p = PRODUCTS[productSel.value];
+    const qty = parseInt(qtyInput.value) || 1;
+    totalDisplay.textContent = "RM " + (p.price * qty).toFixed(0);
+  }
+  productSel.addEventListener('change', refreshColourSize);
+  qtyInput.addEventListener('input', updateTotal);
+  refreshColourSize();
+
+  // ---- prefill from URL params (?product=..&colour=..&size=..) ----
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('colour')) {
+    const idx = [...colourSel.options].findIndex(o => o.value === params.get('colour'));
+    if (idx >= 0) colourSel.selectedIndex = idx;
+  }
+  if (params.get('size')) {
+    const idx = [...sizeSel.options].findIndex(o => o.value === params.get('size'));
+    if (idx >= 0) sizeSel.selectedIndex = idx;
+  }
+
+  // ---- delivery method radio behaviour ----
+  document.querySelectorAll('#deliveryGroup .radio-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+      document.querySelectorAll('#deliveryGroup .radio-option').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+      opt.querySelector('input').checked = true;
+      const val = opt.dataset.value;
+      const addressBox = document.getElementById('addressBox');
+      if (val === "Self Pick-up") {
+        addressBox.classList.remove('show');
+      } else {
+        addressBox.classList.add('show');
+      }
+    });
+  });
+
+  // ---- payment method radio behaviour ----
+  let SETTINGS = {};
+  document.querySelectorAll('#paymentGroup .radio-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+      document.querySelectorAll('#paymentGroup .radio-option').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+      opt.querySelector('input').checked = true;
+      const val = opt.dataset.value;
+      const bankInfo = document.getElementById('bankInfo');
+      const qrInfo = document.getElementById('qrInfo');
+      bankInfo.classList.remove('show'); qrInfo.classList.remove('show');
+      if (val === "Bank Transfer") {
+        bankInfo.innerHTML = `Bank: ${SETTINGS.BANK_NAME || '-'}<br>Account No: ${SETTINGS.BANK_ACCOUNT_NO || '-'}<br>Account Name: ${SETTINGS.BANK_ACCOUNT_NAME || '-'}`;
+        bankInfo.classList.add('show');
+      } else if (val === "QR Payment") {
+        qrInfo.innerHTML = `Scan the QR below to pay:`;
+        if (SETTINGS.QR_IMAGE_URL) {
+          const img = document.createElement('img');
+          img.src = SETTINGS.QR_IMAGE_URL;
+          qrInfo.appendChild(img);
+        }
+        qrInfo.classList.add('show');
+      }
+    });
+  });
+
+  // ---- fetch settings (bank details / QR) on load ----
+  if (API_URL && API_URL.startsWith('http')) {
+    fetch(`${API_URL}?action=getSettings`)
+      .then(r => r.json())
+      .then(data => { if (data.success) SETTINGS = data.settings; })
+      .catch(() => {});
+  }
+
+  // ---- payment proof upload ----
+  const uploadBox = document.getElementById('uploadBox');
+  const proofFile = document.getElementById('proofFile');
+  const proofPreview = document.getElementById('proofPreview');
+  const uploadLabel = document.getElementById('uploadLabel');
+  let proofBase64 = null, proofMime = null, proofName = null;
+
+  uploadBox.addEventListener('click', () => proofFile.click());
+  proofFile.addEventListener('change', () => {
+    const file = proofFile.files[0];
+    if (!file) return;
+    proofName = file.name; proofMime = file.type;
+    const reader = new FileReader();
+    reader.onload = () => {
+      proofBase64 = reader.result.split(',')[1];
+      proofPreview.src = reader.result;
+      proofPreview.style.display = 'block';
+      uploadLabel.textContent = "Tap to change file — " + file.name;
+      uploadBox.classList.add('has-file');
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // ---- form submit ----
+  const form = document.getElementById('orderForm');
+  const submitBtn = document.getElementById('submitBtn');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const deliveryVal = document.querySelector('input[name=delivery]:checked');
+    const paymentVal = document.querySelector('input[name=payment]:checked');
+    if (!deliveryVal) { alert('Please choose a delivery method.'); return; }
+    if (!paymentVal) { alert('Please choose a payment method.'); return; }
+    if (!proofBase64) { alert('Please upload your payment proof.'); return; }
+    if (!API_URL || !API_URL.startsWith('http')) { alert('Order system not connected yet — API_URL not set.'); return; }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Submitting...";
+
+    const p = PRODUCTS[productSel.value];
+    const qty = parseInt(qtyInput.value) || 1;
+
+    const payload = {
+      action: "createOrder",
+      customerName: document.getElementById('customerName').value,
+      phone: document.getElementById('phone').value,
+      product: p.name,
+      colour: colourSel.value,
+      size: sizeSel.value,
+      qty: qty,
+      unitPrice: p.price,
+      totalPrice: p.price * qty,
+      deliveryMethod: deliveryVal.value,
+      addressNotes: document.getElementById('addressNotes').value,
+      paymentMethod: paymentVal.value,
+      proofBase64: proofBase64,
+      proofFilename: proofName,
+      proofMimeType: proofMime
+    };
+
+    try {
+      const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) });
+      const data = await res.json();
+      if (data.success) {
+        document.getElementById('confirmOrderId').textContent = data.orderId;
+        const msg = `Hi Ucop Spikes! I just submitted an order.%0AOrder ID: ${data.orderId}%0APlease confirm once payment is verified. Thanks!`;
+        document.getElementById('waFollowUp').href = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
+        document.getElementById('formSection').classList.add('hide');
+        document.getElementById('confirmBox').classList.add('show');
+      } else {
+        alert('Something went wrong: ' + (data.error || 'unknown error'));
+        submitBtn.disabled = false; submitBtn.textContent = "Submit Order";
+      }
+    } catch (err) {
+      alert('Could not submit order. Please check your connection and try again.');
+      submitBtn.disabled = false; submitBtn.textContent = "Submit Order";
+    }
+  });
+</script>
+
+</body>
+</html>
