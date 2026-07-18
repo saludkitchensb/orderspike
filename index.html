@@ -418,6 +418,7 @@
     <a href="#catalog">Catalog</a>
     <a href="#" id="navSizeGuide">Size Guide</a>
     <a href="#how">How To Order</a>
+    <a href="order.html">Place Order</a>
     <a href="https://wa.me/601126103958" target="_blank" class="cta">WhatsApp Us</a>
   </div>
 </nav>
@@ -492,6 +493,7 @@
       <div class="sizes" id="mSizes"></div>
       <div class="note">Sizes shown are for reference. Every pair is hand-checked for availability before your order is confirmed — tap below to check yours on WhatsApp.</div>
       <a href="#" target="_blank" class="whatsapp-btn disabled" id="waBtn">Select a size first</a>
+      <a href="#" id="placeOrderLink" style="display:block; text-align:center; margin-top:12px; font-family:'Space Mono',monospace; font-size:11.5px; letter-spacing:.05em; text-transform:uppercase; color:var(--steel); text-decoration:underline;">Already confirmed on WhatsApp? Place your order →</a>
     </div>
   </div>
 </div>
@@ -686,10 +688,13 @@
       waBtn.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
       waBtn.textContent = "Check availability on WhatsApp";
       waBtn.classList.remove('disabled');
+      document.getElementById('placeOrderLink').href =
+        `order.html?colour=${encodeURIComponent(colorName)}&size=${encodeURIComponent(selectedSize)}`;
     } else {
       waBtn.href = "#";
       waBtn.textContent = "Select a size first";
       waBtn.classList.add('disabled');
+      document.getElementById('placeOrderLink').href = "order.html";
     }
   }
 
