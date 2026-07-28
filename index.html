@@ -3,438 +3,326 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UCOP SPIKES — Catalog</title>
+<title>UCOP SPIKES — Track Spikes Malaysia</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink:#0B0D12;
-    --ink-soft:#171A21;
-    --cloud:#F3F3EF;
-    --cloud-dim:#E7E7E1;
-    --track-red:#FF3B30;
-    --volt:#C6FF3D;
-    --steel:#8B92A0;
-    --steel-line:#2A2E38;
-    --radius:2px;
+    --ink:#0B0D12; --ink-soft:#171A21; --cloud:#F3F3EF; --cloud-dim:#E7E7E1;
+    --track-red:#FF3B30; --volt:#C6FF3D; --steel:#8B92A0; --steel-line:#2A2E38;
+    --wa:#25D366; --radius:2px;
   }
-  *{box-sizing:border-box; margin:0; padding:0;}
+  *{box-sizing:border-box;margin:0;padding:0;}
   html{scroll-behavior:smooth;}
-  body{
-    background:var(--ink);
-    color:var(--cloud);
-    font-family:'Inter',sans-serif;
-    -webkit-font-smoothing:antialiased;
-  }
-  ::selection{background:var(--volt); color:var(--ink);}
+  body{background:var(--ink);color:var(--cloud);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;}
+  ::selection{background:var(--volt);color:var(--ink);}
 
   .eyebrow{
-    font-family:'Space Mono',monospace;
-    font-size:12px;
-    letter-spacing:.14em;
-    text-transform:uppercase;
-    color:var(--volt);
-    display:flex;
-    align-items:center;
-    gap:10px;
+    font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--volt);display:flex;align-items:center;gap:10px;
   }
-  .eyebrow::before{
-    content:"";
-    width:18px; height:2px;
-    background:var(--track-red);
-    display:inline-block;
-  }
-
-  h1,h2,h3{
-    font-family:'Oswald',sans-serif;
-    font-style:italic;
-    text-transform:uppercase;
-    letter-spacing:.01em;
-    line-height:.95;
-  }
+  .eyebrow::before{content:"";width:18px;height:2px;background:var(--track-red);display:inline-block;}
+  h1,h2,h3{font-family:'Oswald',sans-serif;font-style:italic;text-transform:uppercase;letter-spacing:.01em;line-height:.95;}
 
   /* ===== NAV ===== */
   nav{
-    position:sticky; top:0; z-index:50;
-    display:flex; align-items:center; justify-content:space-between;
+    position:sticky;top:0;z-index:50;
+    display:flex;align-items:center;justify-content:space-between;
     padding:10px 5vw;
-    background:rgba(11,13,18,0.88);
+    background:rgba(11,13,18,0.92);
     backdrop-filter:blur(10px);
     border-bottom:1px solid var(--steel-line);
+    gap:12px;
   }
-  .brand{ display:flex; align-items:center; gap:12px; }
-  .brand img{ height:58px; width:auto; display:block; }
-  .brand span{
-    font-family:'Oswald',sans-serif; font-style:italic; font-weight:600;
-    font-size:18px; letter-spacing:.03em; text-transform:uppercase;
+  .brand{display:flex;align-items:center;gap:12px;}
+  .brand img{height:52px;width:auto;display:block;}
+  .brand span{font-family:'Oswald',sans-serif;font-style:italic;font-weight:600;font-size:18px;letter-spacing:.03em;text-transform:uppercase;}
+  @media(max-width:480px){.brand img{height:40px;}}
+
+  .nav-search{
+    display:flex;align-items:center;gap:8px;
+    background:var(--ink-soft);border:1px solid var(--steel-line);
+    padding:8px 14px;flex:1;max-width:260px;
+    transition:border-color .2s;
   }
-  @media (max-width:480px){ .brand img{ height:44px; } }
-  .navlinks{ display:flex; gap:32px; align-items:center; }
+  .nav-search:focus-within{border-color:var(--volt);}
+  .nav-search svg{width:15px;height:15px;stroke:var(--steel);flex-shrink:0;}
+  .nav-search input{
+    background:none;border:none;outline:none;
+    color:var(--cloud);font-family:'Space Mono',monospace;font-size:12px;width:100%;
+  }
+  .nav-search input::placeholder{color:var(--steel);}
+
+  .navlinks{display:flex;gap:24px;align-items:center;}
   .navlinks a{
-    color:var(--cloud); text-decoration:none;
-    font-family:'Space Mono',monospace; font-size:12px;
-    letter-spacing:.1em; text-transform:uppercase;
-    opacity:.75; transition:opacity .2s, color .2s;
+    color:var(--cloud);text-decoration:none;
+    font-family:'Space Mono',monospace;font-size:12px;
+    letter-spacing:.1em;text-transform:uppercase;
+    opacity:.75;transition:opacity .2s,color .2s;
+    white-space:nowrap;
   }
-  .navlinks a:hover{ opacity:1; color:var(--volt); }
-  .navlinks a.cta{
-    background:var(--track-red); color:var(--ink);
-    padding:10px 18px; opacity:1; font-weight:700;
+  .navlinks a:hover{opacity:1;color:var(--volt);}
+  .navlinks a.wa-nav{
+    display:flex;align-items:center;gap:6px;
+    color:var(--wa);opacity:1;font-weight:700;
   }
-  .navlinks a.cta:hover{ background:var(--volt); color:var(--ink); }
-  @media (max-width:760px){ .navlinks{ display:none; } }
+  .navlinks a.wa-nav:hover{color:#1db954;}
+  @media(max-width:760px){.navlinks{display:none;}.nav-search{max-width:160px;}}
+  @media(max-width:480px){.nav-search{display:none;}}
 
   /* ===== HERO ===== */
   .hero{
-    position:relative;
-    padding:70px 5vw 40px;
-    display:grid;
-    grid-template-columns:1.1fr .9fr;
-    gap:40px;
-    align-items:center;
-    overflow:hidden;
+    position:relative;padding:70px 5vw 48px;
+    display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;overflow:hidden;
   }
   .hero::before{
-    content:"";
-    position:absolute; inset:0;
+    content:"";position:absolute;inset:0;
     background:
-      repeating-linear-gradient(115deg, transparent 0 90px, rgba(255,59,48,.08) 90px 94px, transparent 94px 180px),
-      repeating-linear-gradient(115deg, transparent 0 140px, rgba(198,255,61,.06) 140px 144px, transparent 144px 260px);
+      repeating-linear-gradient(115deg,transparent 0 90px,rgba(255,59,48,.08) 90px 94px,transparent 94px 180px),
+      repeating-linear-gradient(115deg,transparent 0 140px,rgba(198,255,61,.06) 140px 144px,transparent 144px 260px);
     pointer-events:none;
   }
-  .hero-copy{ position:relative; z-index:2; }
-  .bib-number{
-    font-family:'Space Mono',monospace;
-    font-size:13px; color:var(--steel);
-    letter-spacing:.1em;
-    margin-bottom:18px;
+  .hero-copy{position:relative;z-index:2;}
+  .hero h1{font-size:clamp(40px,6.4vw,92px);color:var(--cloud);margin-bottom:14px;}
+  .hero h1 .accent{color:var(--track-red);}
+  .hero p{font-size:15px;color:var(--steel);max-width:440px;margin-bottom:24px;line-height:1.65;}
+  .hero-actions{display:flex;gap:14px;flex-wrap:wrap;align-items:center;}
+  .hero-lock{
+    display:flex;align-items:center;gap:7px;margin-top:12px;
+    font-family:'Space Mono',monospace;font-size:11px;color:var(--steel);letter-spacing:.04em;
   }
-  .bib-number b{ color:var(--volt); }
-  .hero h1{
-    font-size:clamp(40px, 6.4vw, 92px);
-    color:var(--cloud);
-    margin-bottom:22px;
-  }
-  .hero h1 .accent{ color:var(--track-red); }
-  .hero p{
-    font-size:16px; color:var(--steel);
-    max-width:440px; margin-bottom:30px;
-    font-family:'Inter',sans-serif;
-  }
-  .hero-actions{ display:flex; gap:14px; flex-wrap:wrap; }
+  .hero-lock svg{width:14px;height:14px;stroke:var(--volt);flex-shrink:0;}
+
   .btn{
-    display:inline-flex; align-items:center; gap:8px;
-    font-family:'Space Mono',monospace; font-size:12.5px;
-    letter-spacing:.08em; text-transform:uppercase; font-weight:700;
-    padding:15px 26px; text-decoration:none; border:1px solid transparent;
-    cursor:pointer; transition:transform .15s ease, background .2s, color .2s;
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:'Space Mono',monospace;font-size:12.5px;letter-spacing:.08em;
+    text-transform:uppercase;font-weight:700;padding:15px 26px;
+    text-decoration:none;border:1px solid transparent;cursor:pointer;
+    transition:transform .15s ease,background .2s,color .2s;
   }
-  .btn:active{ transform:scale(.97); }
-  .btn-primary{ background:var(--volt); color:var(--ink); }
-  .btn-primary:hover{ background:var(--cloud); }
-  .btn-outline{ border-color:var(--steel-line); color:var(--cloud); }
-  .btn-outline:hover{ border-color:var(--volt); color:var(--volt); }
+  .btn:active{transform:scale(.97);}
+  .btn-wa{background:var(--wa);color:#fff;}
+  .btn-wa:hover{background:#1db954;color:#fff;}
+  .btn-outline{border-color:var(--steel-line);color:var(--cloud);}
+  .btn-outline:hover{border-color:var(--volt);color:var(--volt);}
 
-  .hero-visual{ position:relative; z-index:2; }
-  .hero-visual .stage{
-    background:var(--cloud);
-    border-radius:var(--radius);
-    padding:26px;
-    position:relative;
-    transform:rotate(-1.4deg);
+  .hero-visual{position:relative;z-index:2;}
+  .photo-panel{
+    position:relative;transform:rotate(-1.2deg);
+    border:1px solid var(--steel-line);overflow:hidden;
   }
-  .hero-visual .stage img{ width:100%; display:block; filter:drop-shadow(0 30px 40px rgba(0,0,0,.5)); }
-  .hero-visual .tag{
-    position:absolute; top:-14px; right:-14px;
-    background:var(--track-red); color:var(--ink);
-    font-family:'Space Mono',monospace; font-size:11px; font-weight:700;
-    padding:8px 12px; letter-spacing:.06em;
-    transform:rotate(4deg);
-  }
-  .hero-visual .photo-panel{
-    position:relative;
-    transform:rotate(-1.2deg);
-    border:1px solid var(--steel-line);
-    box-shadow:0 30px 50px rgba(0,0,0,.55);
-    overflow:hidden;
-  }
-  .hero-visual .photo-panel img{
-    width:100%; display:block;
-    filter:saturate(1.12) contrast(1.06);
-  }
-  .hero-visual .photo-panel::after{
-    content:"";
-    position:absolute; inset:0;
-    background:
-      linear-gradient(200deg, rgba(255,59,48,.16), transparent 45%),
-      linear-gradient(0deg, rgba(11,13,18,.75) 0%, rgba(11,13,18,0) 32%),
-      linear-gradient(180deg, rgba(11,13,18,.15) 0%, transparent 20%);
-    mix-blend-mode:normal;
+  .photo-panel img{width:100%;display:block;filter:saturate(1.12) contrast(1.06);}
+  .photo-panel::after{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(200deg,rgba(255,59,48,.16),transparent 45%),linear-gradient(0deg,rgba(11,13,18,.75) 0%,rgba(11,13,18,0) 32%);
     pointer-events:none;
   }
-  .hero-visual .photo-panel::before{
-    content:"";
-    position:absolute; inset:0;
-    box-shadow:inset 0 0 0 1px rgba(198,255,61,.12);
-    pointer-events:none; z-index:2;
-  }
-  @media (max-width:900px){
-    .hero{ grid-template-columns:1fr; padding-top:40px; }
-    .hero-visual{ order:-1; }
-  }
+  .photo-panel::before{content:"";position:absolute;inset:0;box-shadow:inset 0 0 0 1px rgba(198,255,61,.12);pointer-events:none;z-index:2;}
+  @media(max-width:900px){.hero{grid-template-columns:1fr;padding-top:40px;}.hero-visual{order:-1;}}
 
-  /* ===== FINISH LINE DIVIDER ===== */
-  .finish-line{
-    height:14px;
-    background:repeating-linear-gradient(90deg, var(--cloud) 0 26px, var(--ink) 26px 52px);
-    border-top:1px solid var(--steel-line);
-    border-bottom:1px solid var(--steel-line);
-  }
+  /* ===== FINISH LINE ===== */
+  .finish-line{height:14px;background:repeating-linear-gradient(90deg,var(--cloud) 0 26px,var(--ink) 26px 52px);border-top:1px solid var(--steel-line);border-bottom:1px solid var(--steel-line);}
 
   /* ===== FILTER BAR ===== */
   .filter-bar{
-    display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap;
     padding:34px 5vw 10px;
   }
-  .filter-bar .label{
-    font-family:'Space Mono',monospace; font-size:11px; color:var(--steel);
-    letter-spacing:.1em; text-transform:uppercase; margin-right:8px;
-  }
+  .filter-bar .label{font-family:'Space Mono',monospace;font-size:11px;color:var(--steel);letter-spacing:.1em;text-transform:uppercase;margin-right:8px;}
   .chip{
-    font-family:'Space Mono',monospace; font-size:12px;
-    letter-spacing:.05em; text-transform:uppercase;
-    padding:9px 16px; border:1px solid var(--steel-line);
-    background:transparent; color:var(--cloud);
-    cursor:pointer; transition:all .15s ease;
+    font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.05em;text-transform:uppercase;
+    padding:9px 16px;border:1px solid var(--steel-line);background:transparent;color:var(--cloud);
+    cursor:pointer;transition:all .15s ease;
   }
-  .chip.active, .chip:hover{ background:var(--volt); border-color:var(--volt); color:var(--ink); }
+  .chip.active,.chip:hover{background:var(--volt);border-color:var(--volt);color:var(--ink);}
 
   /* ===== PRODUCT GRID ===== */
-  .catalog{
-    padding:26px 5vw 100px;
-    display:grid;
-    grid-template-columns:repeat(auto-fill, minmax(270px, 1fr));
-    gap:26px;
-  }
+  .catalog{padding:26px 5vw 100px;display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:26px;}
   .card{
-    background:var(--ink-soft);
-    border:1px solid var(--steel-line);
-    position:relative;
-    cursor:pointer;
-    transition:border-color .2s, transform .2s;
+    background:var(--ink-soft);border:1px solid var(--steel-line);
+    position:relative;cursor:pointer;transition:border-color .2s,transform .2s;
   }
-  .card:hover{ border-color:var(--volt); transform:translateY(-4px); }
+  .card:hover{border-color:var(--volt);transform:translateY(-4px);}
   .card .bib{
-    position:absolute; top:12px; left:12px; z-index:3;
-    font-family:'Space Mono',monospace; font-size:11px; font-weight:700;
-    background:var(--ink); border:1px solid var(--steel-line);
-    color:var(--volt); padding:5px 9px; letter-spacing:.05em;
+    position:absolute;top:12px;left:12px;z-index:3;
+    font-family:'Space Mono',monospace;font-size:11px;font-weight:700;
+    background:var(--ink);border:1px solid var(--steel-line);color:var(--volt);padding:5px 9px;letter-spacing:.05em;
   }
-  .card .frame{
-    background:var(--cloud); aspect-ratio:1/.82;
-    display:flex; align-items:center; justify-content:center;
-    overflow:hidden; padding:22px;
+  .card .frame{background:var(--cloud);aspect-ratio:1/.82;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:22px;}
+  .card .frame img{width:100%;object-fit:contain;transition:transform .3s ease;}
+  .card:hover .frame img{transform:scale(1.05);}
+  .card .info{padding:18px 18px 20px;}
+  .card .info .cat{font-family:'Space Mono',monospace;font-size:10.5px;color:var(--track-red);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;}
+  .card .info h3{font-size:21px;color:var(--cloud);font-style:italic;margin-bottom:10px;}
+  .card .info .row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+  .card .info .price{font-family:'Space Mono',monospace;font-weight:700;color:var(--cloud);font-size:15px;}
+  .card .swatches{display:flex;gap:7px;margin-bottom:14px;}
+  .card .swatch{width:18px;height:18px;border-radius:50%;border:1px solid rgba(255,255,255,.25);cursor:pointer;position:relative;transition:transform .15s;}
+  .card .swatch.active{box-shadow:0 0 0 2px var(--ink-soft),0 0 0 3px var(--volt);}
+  .card .swatch:hover{transform:scale(1.12);}
+
+  /* card WhatsApp CTA */
+  .card-wa-btn{
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    background:var(--wa);color:#fff;padding:12px;
+    font-family:'Space Mono',monospace;font-size:11px;font-weight:700;
+    letter-spacing:.06em;text-transform:uppercase;
+    transition:background .2s;
   }
-  .card .frame img{ width:100%; object-fit:contain; transition:transform .3s ease; }
-  .card:hover .frame img{ transform:scale(1.05); }
-  .card .info{ padding:18px 18px 20px; }
-  .card .info .cat{
-    font-family:'Space Mono',monospace; font-size:10.5px; color:var(--track-red);
-    letter-spacing:.1em; text-transform:uppercase; margin-bottom:6px;
+  .card-wa-btn:hover{background:#1db954;}
+  .card-wa-btn svg{width:16px;height:16px;fill:#fff;flex-shrink:0;}
+  .card-lock-note{
+    display:flex;align-items:center;gap:6px;
+    padding:7px 14px;background:rgba(198,255,61,.06);
+    border-top:1px solid rgba(198,255,61,.14);
   }
-  .card .info h3{
-    font-size:21px; color:var(--cloud); font-style:italic;
-    margin-bottom:10px;
-  }
-  .card .info .row{
-    display:flex; align-items:center; justify-content:space-between;
-    margin-top:4px;
-  }
-  .card .info .price{
-    font-family:'Space Mono',monospace; font-weight:700; color:var(--cloud); font-size:15px;
-  }
-  .card .info .check{
-    font-family:'Space Mono',monospace; font-size:10.5px; color:var(--steel);
-    letter-spacing:.06em; text-transform:uppercase;
-  }
-  .card .info .check b{ color:var(--volt); }
-  .card .swatches{ display:flex; gap:7px; margin-top:12px; }
-  .card .swatch{
-    width:18px; height:18px; border-radius:50%;
-    border:1px solid rgba(255,255,255,.25);
-    cursor:pointer; position:relative;
-    transition:transform .15s;
-  }
-  .card .swatch.active{ box-shadow:0 0 0 2px var(--ink-soft), 0 0 0 3px var(--volt); }
-  .card .swatch:hover{ transform:scale(1.12); }
+  .card-lock-note svg{width:12px;height:12px;stroke:var(--volt);flex-shrink:0;}
+  .card-lock-note span{font-family:'Space Mono',monospace;font-size:10px;color:var(--volt);letter-spacing:.04em;}
 
   /* ===== MODAL ===== */
   .overlay{
-    position:fixed; inset:0; background:rgba(6,7,10,.86);
-    display:none; align-items:flex-start; justify-content:center;
-    padding:40px 5vw; z-index:100; overflow-y:auto;
+    position:fixed;inset:0;background:rgba(6,7,10,.88);
+    display:none;align-items:flex-start;justify-content:center;
+    padding:40px 5vw;z-index:100;overflow-y:auto;
   }
-  .overlay.open{ display:flex; }
+  .overlay.open{display:flex;}
   .modal{
-    background:var(--ink-soft); border:1px solid var(--steel-line);
-    max-width:920px; width:100%;
-    display:grid; grid-template-columns:1fr 1fr;
-    gap:0; position:relative;
+    background:var(--ink-soft);border:1px solid var(--steel-line);
+    max-width:920px;width:100%;display:grid;grid-template-columns:1fr 1fr;position:relative;
   }
   .modal-close{
-    position:absolute; top:16px; right:16px; z-index:5;
-    background:var(--ink); border:1px solid var(--steel-line); color:var(--cloud);
-    width:36px; height:36px; font-size:18px; cursor:pointer;
-    display:flex; align-items:center; justify-content:center;
+    position:absolute;top:16px;right:16px;z-index:5;
+    background:var(--ink);border:1px solid var(--steel-line);color:var(--cloud);
+    width:36px;height:36px;font-size:18px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
   }
-  .modal-close:hover{ border-color:var(--track-red); color:var(--track-red); }
-  .modal-gallery{ background:var(--cloud); padding:24px; }
-  .modal-gallery .main{ aspect-ratio:1/.85; display:flex; align-items:center; justify-content:center; margin-bottom:14px; }
-  .modal-gallery .main img{ width:100%; object-fit:contain; }
-  .modal-thumbs{ display:flex; gap:10px; }
-  .modal-thumbs img{
-    width:60px; height:52px; object-fit:contain; background:#fff;
-    border:1px solid var(--cloud-dim); cursor:pointer; padding:4px;
-    transition:border-color .15s;
-  }
-  .modal-thumbs img.active, .modal-thumbs img:hover{ border-color:var(--track-red); }
-  .modal-body{ padding:34px 30px; display:flex; flex-direction:column; }
-  .modal-body .cat{
-    font-family:'Space Mono',monospace; font-size:11px; color:var(--track-red);
-    letter-spacing:.1em; text-transform:uppercase; margin-bottom:8px;
-  }
-  .modal-body h2{ font-size:32px; color:var(--cloud); margin-bottom:10px; }
-  .modal-body .price{
-    font-family:'Space Mono',monospace; font-size:20px; font-weight:700;
-    color:var(--volt); margin-bottom:18px;
-  }
-  .modal-body .desc{
-    font-size:14px; color:var(--steel); line-height:1.6; margin-bottom:24px;
-  }
-  .color-label{
-    font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.1em;
-    text-transform:uppercase; color:var(--steel); margin-bottom:10px;
-    display:flex; justify-content:space-between; align-items:center;
-  }
-  .color-label .current{ color:var(--volt); text-transform:none; letter-spacing:0; }
-  .colors{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom:22px; }
-  .color-swatch{
-    width:32px; height:32px; border-radius:50%;
-    border:1px solid rgba(255,255,255,.25);
-    cursor:pointer; transition:all .15s;
-  }
-  .color-swatch.selected{ box-shadow:0 0 0 2px var(--ink-soft), 0 0 0 4px var(--volt); }
-  .size-label{
-    font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.1em;
-    text-transform:uppercase; color:var(--steel); margin-bottom:10px;
-    display:flex; justify-content:space-between; align-items:center;
-  }
-  .size-guide-link{
-    font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.05em;
-    text-transform:none; color:var(--track-red); text-decoration:underline;
-    cursor:pointer; background:none; border:none; padding:0;
-  }
-  .size-guide-link:hover{ color:var(--volt); }
-  .sizes{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:26px; }
-  .size{
-    min-width:44px; padding:9px 6px; text-align:center;
-    border:1px solid var(--steel-line); background:transparent;
-    color:var(--cloud); font-family:'Space Mono',monospace; font-size:13px;
-    cursor:pointer; transition:all .15s;
-  }
-  .size.selected{ background:var(--volt); border-color:var(--volt); color:var(--ink); font-weight:700; }
-  .modal-body .note{
-    font-size:12px; color:var(--steel); margin-bottom:18px; line-height:1.55;
-    border-left:2px solid var(--track-red); padding-left:12px;
-  }
+  .modal-close:hover{border-color:var(--track-red);color:var(--track-red);}
+  .modal-gallery{background:var(--cloud);padding:24px;}
+  .modal-gallery .main{aspect-ratio:1/.85;display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
+  .modal-gallery .main img{width:100%;object-fit:contain;}
+  .modal-thumbs{display:flex;gap:10px;}
+  .modal-thumbs img{width:60px;height:52px;object-fit:contain;background:#fff;border:1px solid var(--cloud-dim);cursor:pointer;padding:4px;transition:border-color .15s;}
+  .modal-thumbs img.active,.modal-thumbs img:hover{border-color:var(--track-red);}
+  .modal-body{padding:34px 30px;display:flex;flex-direction:column;gap:0;}
+  .modal-body .cat{font-family:'Space Mono',monospace;font-size:11px;color:var(--track-red);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;}
+  .modal-body h2{font-size:30px;color:var(--cloud);margin-bottom:8px;}
+  .modal-body .price{font-family:'Space Mono',monospace;font-size:20px;font-weight:700;color:var(--volt);margin-bottom:16px;}
+  .modal-body .desc{font-size:13.5px;color:var(--steel);line-height:1.6;margin-bottom:20px;}
+
+  .color-label{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--steel);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;}
+  .color-label .current{color:var(--volt);text-transform:none;letter-spacing:0;font-size:11px;}
+  .colors{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px;}
+  .color-swatch{width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,.25);cursor:pointer;transition:all .15s;}
+  .color-swatch.selected{box-shadow:0 0 0 2px var(--ink-soft),0 0 0 4px var(--volt);}
+
+  .size-label{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--steel);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;}
+  .size-guide-link{font-family:'Space Mono',monospace;font-size:11px;color:var(--track-red);text-decoration:underline;cursor:pointer;background:none;border:none;padding:0;}
+  .size-guide-link:hover{color:var(--volt);}
+  .sizes{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;}
+  .size{min-width:44px;padding:9px 6px;text-align:center;border:1px solid var(--steel-line);background:transparent;color:var(--cloud);font-family:'Space Mono',monospace;font-size:13px;cursor:pointer;transition:all .15s;}
+  .size.selected{background:var(--volt);border-color:var(--volt);color:var(--ink);font-weight:700;}
+
+  /* 3-step process inside modal */
+  .how-steps{background:var(--ink);border:1px solid var(--steel-line);padding:14px 16px;margin-bottom:18px;}
+  .how-step{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;}
+  .how-step:last-child{margin-bottom:0;}
+  .step-num{background:var(--volt);color:var(--ink);width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:9px;font-weight:700;flex-shrink:0;margin-top:1px;}
+  .step-text{font-family:'Space Mono',monospace;font-size:11px;color:var(--steel);line-height:1.5;letter-spacing:.02em;}
+  .step-text b{color:var(--cloud);}
+
+  /* modal WhatsApp CTA */
   .whatsapp-btn{
-    margin-top:auto;
-    background:var(--track-red); color:var(--ink);
-    font-family:'Space Mono',monospace; font-weight:700; font-size:13px;
-    letter-spacing:.06em; text-transform:uppercase;
-    padding:16px; text-align:center; text-decoration:none;
-    display:block; transition:background .2s;
+    display:flex;align-items:center;justify-content:center;gap:10px;
+    margin-top:auto;background:var(--wa);color:#fff;
+    font-family:'Space Mono',monospace;font-weight:700;font-size:13px;
+    letter-spacing:.06em;text-transform:uppercase;padding:16px;text-decoration:none;
+    transition:background .2s;
   }
-  .whatsapp-btn:hover{ background:var(--volt); }
-  .whatsapp-btn.disabled{
-    background:var(--steel-line); color:var(--steel); pointer-events:none;
+  .whatsapp-btn:hover{background:#1db954;}
+  .whatsapp-btn.disabled{background:var(--steel-line);color:var(--steel);pointer-events:none;}
+  .whatsapp-btn svg{width:18px;height:18px;fill:#fff;flex-shrink:0;}
+  .modal-lock{
+    display:flex;align-items:center;gap:6px;
+    padding:9px 16px;background:rgba(198,255,61,.06);border-top:1px solid rgba(198,255,61,.14);
+    font-family:'Space Mono',monospace;font-size:10px;color:var(--volt);letter-spacing:.04em;
   }
-  @media (max-width:720px){
-    .modal{ grid-template-columns:1fr; }
-  }
+  .modal-lock svg{width:13px;height:13px;stroke:var(--volt);flex-shrink:0;}
+
+  @media(max-width:720px){.modal{grid-template-columns:1fr;}}
 
   /* ===== SIZE GUIDE ===== */
-  .sg-modal{
-    background:var(--ink-soft); border:1px solid var(--steel-line);
-    max-width:520px; width:100%; position:relative;
-    padding:32px 28px;
-  }
-  .sg-modal h3{ font-size:26px; color:var(--cloud); margin-bottom:6px; }
-  .sg-modal .sub{
-    font-family:'Space Mono',monospace; font-size:11.5px; color:var(--steel);
-    margin-bottom:20px;
-  }
-  .sg-table{ width:100%; border-collapse:collapse; }
-  .sg-table th{
-    font-family:'Space Mono',monospace; font-size:10.5px; letter-spacing:.08em;
-    text-transform:uppercase; color:var(--volt); text-align:left;
-    padding:9px 8px; border-bottom:1px solid var(--steel-line);
-  }
-  .sg-table td{
-    font-family:'Space Mono',monospace; font-size:13px; color:var(--cloud);
-    padding:8px; border-bottom:1px solid rgba(255,255,255,.06);
-  }
-  .sg-table tr:hover td{ background:rgba(198,255,61,.05); }
-  .sg-note{
-    margin-top:16px; font-size:12px; color:var(--steel); line-height:1.55;
-    border-left:2px solid var(--track-red); padding-left:12px;
-  }
+  .sg-modal{background:var(--ink-soft);border:1px solid var(--steel-line);max-width:520px;width:100%;position:relative;padding:32px 28px;}
+  .sg-modal h3{font-size:26px;color:var(--cloud);margin-bottom:6px;}
+  .sg-modal .sub{font-family:'Space Mono',monospace;font-size:11.5px;color:var(--steel);margin-bottom:20px;}
+  .sg-table{width:100%;border-collapse:collapse;}
+  .sg-table th{font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--volt);text-align:left;padding:9px 8px;border-bottom:1px solid var(--steel-line);}
+  .sg-table td{font-family:'Space Mono',monospace;font-size:13px;color:var(--cloud);padding:8px;border-bottom:1px solid rgba(255,255,255,.06);}
+  .sg-table tr:hover td{background:rgba(198,255,61,.05);}
+  .sg-note{margin-top:16px;font-size:12px;color:var(--steel);line-height:1.55;border-left:2px solid var(--track-red);padding-left:12px;}
 
   /* ===== INFO STRIP ===== */
-  .info-strip{
-    border-top:1px solid var(--steel-line);
-    padding:60px 5vw; display:grid;
-    grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
-    gap:30px;
-  }
-  .info-strip .item .eyebrow{ margin-bottom:10px; }
-  .info-strip .item p{ font-size:13.5px; color:var(--steel); line-height:1.6; }
+  .info-strip{border-top:1px solid var(--steel-line);padding:60px 5vw;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:30px;}
+  .info-strip .item .eyebrow{margin-bottom:10px;}
+  .info-strip .item p{font-size:13.5px;color:var(--steel);line-height:1.6;}
 
-  footer{
-    border-top:1px solid var(--steel-line);
-    padding:26px 5vw; text-align:center;
-    font-family:'Space Mono',monospace; font-size:11px; color:var(--steel);
-    letter-spacing:.05em;
+  footer{border-top:1px solid var(--steel-line);padding:26px 5vw;text-align:center;font-family:'Space Mono',monospace;font-size:11px;color:var(--steel);letter-spacing:.05em;}
+
+  /* ===== MOBILE NAV DRAWER ===== */
+  .mob-wa{
+    position:fixed;bottom:0;left:0;right:0;z-index:40;
+    display:none;
+    background:var(--wa);color:#fff;
+    padding:16px 5vw;text-align:center;
+    font-family:'Space Mono',monospace;font-weight:700;font-size:13px;
+    letter-spacing:.06em;text-transform:uppercase;text-decoration:none;
+    align-items:center;justify-content:center;gap:8px;
   }
+  .mob-wa svg{width:18px;height:18px;fill:#fff;}
+  @media(max-width:760px){.mob-wa{display:flex;}}
 </style>
 </head>
 <body>
 
 <nav>
   <div class="brand">
-    <img src="assets/logo.png" alt="Ucop Spikes">
+    <img src="assets/logo.png" alt="Ucop Spikes" onerror="this.style.display='none'">
+    <span>Ucop Spikes</span>
+  </div>
+  <div class="nav-search">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" id="searchInput" placeholder="Search spikes…" autocomplete="off">
   </div>
   <div class="navlinks">
     <a href="#catalog">Catalog</a>
-    <a href="#" id="navSizeGuide">Size Guide</a>
-    <a href="#how">How To Order</a>
-    <a href="order.html">Place Order</a>
-    <a href="https://wa.me/601126103958" target="_blank" class="cta">WhatsApp Us</a>
+    <a href="#" id="navSizeGuide">Size guide</a>
+    <a href="#how">How it works</a>
+    <a href="https://wa.me/601126103958" target="_blank" class="wa-nav">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12.004 2C6.477 2 2 6.477 2 12.004c0 1.771.463 3.433 1.272 4.878L2.05 21.95l5.186-1.208A10.007 10.007 0 0 0 12.004 22C17.53 22 22 17.525 22 12.004 22 6.477 17.53 2 12.004 2zm0 18.198a8.19 8.19 0 0 1-4.181-1.145l-.299-.178-3.08.718.748-3.002-.196-.31A8.204 8.204 0 0 1 3.8 12.004c0-4.524 3.682-8.198 8.204-8.198 4.52 0 8.2 3.674 8.2 8.198 0 4.525-3.68 8.194-8.2 8.194z"/></svg>
+      WhatsApp us
+    </a>
   </div>
 </nav>
 
 <section class="hero">
   <div class="hero-copy">
-    <h1>Your Gateway<br>to Authentic<br><span class="accent">Global Track Gear.</span></h1>
-    <p>Track & field spikes for sprinters, distance runners and jumpers. Every pair confirmed by hand before it ships — DM us your size, we check the rack, you race.</p>
+    <div class="eyebrow" style="margin-bottom:18px;">Track spikes · Malaysia</div>
+    <h1>Your gateway<br>to authentic<br><span class="accent">global track gear.</span></h1>
+    <p>Track & field spikes for sprinters, distance runners, and jumpers. Every pair is hand-verified before we confirm your order — please wait while we confirm size availability with our team.</p>
     <div class="hero-actions">
-      <a href="#catalog" class="btn btn-primary">Shop the catalog</a>
-      <a href="#how" class="btn btn-outline">How ordering works</a>
+      <a href="https://wa.me/601126103958" target="_blank" class="btn btn-wa">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12.004 2C6.477 2 2 6.477 2 12.004c0 1.771.463 3.433 1.272 4.878L2.05 21.95l5.186-1.208A10.007 10.007 0 0 0 12.004 22C17.53 22 22 17.525 22 12.004 22 6.477 17.53 2 12.004 2zm0 18.198a8.19 8.19 0 0 1-4.181-1.145l-.299-.178-3.08.718.748-3.002-.196-.31A8.204 8.204 0 0 1 3.8 12.004c0-4.524 3.682-8.198 8.204-8.198 4.52 0 8.2 3.674 8.2 8.198 0 4.525-3.68 8.194-8.2 8.194z"/></svg>
+        Check availability
+      </a>
+      <a href="#how" class="btn btn-outline">How it works</a>
+    </div>
+    <div class="hero-lock">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Order link sent by us after we confirm stock with our supplier
     </div>
   </div>
   <div class="hero-visual">
     <div class="photo-panel">
-      <img src="assets/spike-lineup.jpg" alt="Track spikes lineup - authentic imported track and field shoes">
+      <img src="assets/spike-lineup.jpg" alt="Track spikes lineup">
     </div>
   </div>
 </section>
@@ -443,35 +331,40 @@
 
 <div class="filter-bar" id="catalog">
   <span class="label">Filter</span>
-  <button class="chip active" data-filter="all">All Spikes</button>
+  <button class="chip active" data-filter="all">All spikes</button>
   <button class="chip" data-filter="sprint">Sprint</button>
-  <button class="chip" data-filter="distance">Middle / Long Distance</button>
-  <button class="chip" data-filter="field">Field Events</button>
+  <button class="chip" data-filter="distance">Middle / long distance</button>
+  <button class="chip" data-filter="field">Field events</button>
 </div>
 
-<div class="catalog" id="catalog-grid">
-  <!-- Card injected by JS from PRODUCTS array -->
-</div>
+<div class="catalog" id="catalog-grid"></div>
 
 <div class="info-strip" id="how">
   <div class="item">
     <div class="eyebrow">Step 01</div>
-    <p><strong style="color:var(--cloud)">Pick a spike & size.</strong> Tap any pair, choose the size you need, hit "Check availability on WhatsApp."</p>
+    <p><strong style="color:var(--cloud)">Pick a spike & size.</strong> Tap any card, choose your colour and size, then tap "Check availability on WhatsApp."</p>
   </div>
   <div class="item">
     <div class="eyebrow">Step 02</div>
-    <p><strong style="color:var(--cloud)">We confirm stock.</strong> Sizes are hand-checked before any order is locked in — no surprise sold-outs.</p>
+    <p><strong style="color:var(--cloud)">Please wait while we confirm.</strong> We'll check size availability and get back to you before any order is locked in.</p>
   </div>
   <div class="item">
     <div class="eyebrow">Step 03</div>
-    <p><strong style="color:var(--cloud)">Pay & choose delivery.</strong> Bank transfer or QR. Worldwide shipping, Lalamove locally, or self pick-up.</p>
+    <p><strong style="color:var(--cloud)">We send you the order link.</strong> Once confirmed, we send you a direct link to complete your order and payment.</p>
   </div>
 </div>
 
 <footer>
-  UCOP SPIKES — Built for the start line. Payment via bank transfer / QR · Worldwide shipping · Lalamove · Self pick-up
+  UCOP SPIKES — Built for the start line &nbsp;·&nbsp; Bank transfer / QR &nbsp;·&nbsp; Worldwide shipping &nbsp;·&nbsp; Lalamove &nbsp;·&nbsp; Self pick-up
 </footer>
 
+<!-- Mobile sticky WhatsApp -->
+<a href="https://wa.me/601126103958" target="_blank" class="mob-wa">
+  <svg viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12.004 2C6.477 2 2 6.477 2 12.004c0 1.771.463 3.433 1.272 4.878L2.05 21.95l5.186-1.208A10.007 10.007 0 0 0 12.004 22C17.53 22 22 17.525 22 12.004 22 6.477 17.53 2 12.004 2zm0 18.198a8.19 8.19 0 0 1-4.181-1.145l-.299-.178-3.08.718.748-3.002-.196-.31A8.204 8.204 0 0 1 3.8 12.004c0-4.524 3.682-8.198 8.204-8.198 4.52 0 8.2 3.674 8.2 8.198 0 4.525-3.68 8.194-8.2 8.194z"/></svg>
+  WhatsApp us
+</a>
+
+<!-- Product modal -->
 <div class="overlay" id="overlay">
   <div class="modal">
     <button class="modal-close" id="modalClose">&times;</button>
@@ -488,25 +381,35 @@
       <div class="colors" id="mColors"></div>
       <div class="size-label">
         <span>Select your size (UK)</span>
-        <button type="button" class="size-guide-link" id="modalSizeGuide">Size Guide</button>
+        <button type="button" class="size-guide-link" id="modalSizeGuide">Size guide</button>
       </div>
       <div class="sizes" id="mSizes"></div>
-      <div class="note">Sizes shown are for reference. Every pair is hand-checked for availability before your order is confirmed — tap below to check yours on WhatsApp.</div>
-      <a href="#" target="_blank" class="whatsapp-btn disabled" id="waBtn">Select a size first</a>
-      <a href="#" id="placeOrderLink" style="display:block; text-align:center; margin-top:12px; font-family:'Space Mono',monospace; font-size:11.5px; letter-spacing:.05em; text-transform:uppercase; color:var(--steel); text-decoration:underline;">Already confirmed on WhatsApp? Place your order →</a>
+      <!-- 3-step process -->
+      <div class="how-steps">
+        <div class="how-step"><div class="step-num">1</div><div class="step-text">Tap below — we get your size request on WhatsApp</div></div>
+        <div class="how-step"><div class="step-num">2</div><div class="step-text">Please wait while we <b>confirm the size availability</b></div></div>
+        <div class="how-step"><div class="step-num">3</div><div class="step-text">We send you a <b>direct order link</b> to lock in your pair</div></div>
+      </div>
+      <a href="#" target="_blank" class="whatsapp-btn disabled" id="waBtn">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12.004 2C6.477 2 2 6.477 2 12.004c0 1.771.463 3.433 1.272 4.878L2.05 21.95l5.186-1.208A10.007 10.007 0 0 0 12.004 22C17.53 22 22 17.525 22 12.004 22 6.477 17.53 2 12.004 2zm0 18.198a8.19 8.19 0 0 1-4.181-1.145l-.299-.178-3.08.718.748-3.002-.196-.31A8.204 8.204 0 0 1 3.8 12.004c0-4.524 3.682-8.198 8.204-8.198 4.52 0 8.2 3.674 8.2 8.198 0 4.525-3.68 8.194-8.2 8.194z"/></svg>
+        <span id="waBtnText">Select a size first</span>
+      </a>
+      <div class="modal-lock">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Order link sent by us after stock is confirmed — no payment yet
+      </div>
     </div>
   </div>
 </div>
 
+<!-- Size guide modal -->
 <div class="overlay" id="sgOverlay">
   <div class="sg-modal">
     <button class="modal-close" id="sgClose">&times;</button>
-    <h3>Size Guide</h3>
+    <h3>Size guide</h3>
     <div class="sub">UK / EU / US / CM conversion — track spikes generally run true to size.</div>
     <table class="sg-table">
-      <thead>
-        <tr><th>UK</th><th>EU</th><th>US (M)</th><th>CM</th></tr>
-      </thead>
+      <thead><tr><th>UK</th><th>EU</th><th>US (M)</th><th>CM</th></tr></thead>
       <tbody>
         <tr><td>6</td><td>39.5</td><td>6.5</td><td>24.5</td></tr>
         <tr><td>6.5</td><td>40</td><td>7</td><td>25</td></tr>
@@ -519,15 +422,13 @@
         <tr><td>10</td><td>44.5</td><td>10.5</td><td>28.5</td></tr>
       </tbody>
     </table>
-    <div class="sg-note">Sizes above are a reference guide only. Confirm your exact fit with us on WhatsApp before ordering — availability is hand-checked per pair.</div>
+    <div class="sg-note">These are reference sizes only. Confirm your exact fit with us on WhatsApp before ordering — availability is hand-checked per pair.</div>
   </div>
 </div>
 
 <script>
-  // ---- CONFIG ----
-  const WHATSAPP_NUMBER = "601126103958"; // Ucop Spikes WhatsApp: +60 11-2610 3958
+  const WHATSAPP_NUMBER = "601126103958";
 
-  // ---- PRODUCT DATA (edit / add products here) ----
   const PRODUCTS = [
     {
       id: "adizero-prime-sp3",
@@ -538,62 +439,67 @@
       desc: "Lightweight sprint spike built on a rigid carbon-infused plate with Lightstrike Pro cushioning for explosive starts and top-end speed.",
       sizes: ["UK6","UK6.5","UK7","UK7.5","UK8","UK8.5","UK9","UK9.5","UK10"],
       colors: [
-        {
-          name: "Cloud White / Core Black / Lucid Red",
-          swatch: "#F3F3EF",
-          images: ["assets/adidas_r.jpeg", "assets/adidas_l.jpeg", "assets/adidas_top.jpeg", "assets/adidas_bottom.jpeg"]
-        },
-        {
-          name: "Cobalt Blue / Zero Metallic / Lucid Lemon",
-          swatch: "#4B3F9E",
-          images: ["assets/blue_r.jpg", "assets/blue_l.jpg", "assets/blue.jpg", "assets/blue_b.jpg"]
-        },
-        {
-          name: "Lucid Lemon / Core Black / Halo Silver",
-          swatch: "#CFFF3D",
-          images: ["assets/green_r.jpg", "assets/green_t.jpg", "assets/green.jpg", "assets/green_b.jpg"]
-        }
+        { name:"Cloud White / Core Black / Lucid Red", swatch:"#F3F3EF", images:["assets/adidas_r.jpeg","assets/adidas_l.jpeg","assets/adidas_top.jpeg","assets/adidas_bottom.jpeg"] },
+        { name:"Cobalt Blue / Zero Metallic / Lucid Lemon", swatch:"#4B3F9E", images:["assets/blue_r.jpg","assets/blue_l.jpg","assets/blue.jpg","assets/blue_b.jpg"] },
+        { name:"Lucid Lemon / Core Black / Halo Silver", swatch:"#CFFF3D", images:["assets/green_r.jpg","assets/green_t.jpg","assets/green.jpg","assets/green_b.jpg"] }
       ]
     }
   ];
 
-  const grid = document.getElementById('catalog-grid');
+  const WA_SVG = `<svg viewBox="0 0 24 24" width="15" height="15" fill="#fff" style="flex-shrink:0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12.004 2C6.477 2 2 6.477 2 12.004c0 1.771.463 3.433 1.272 4.878L2.05 21.95l5.186-1.208A10.007 10.007 0 0 0 12.004 22C17.53 22 22 17.525 22 12.004 22 6.477 17.53 2 12.004 2zm0 18.198a8.19 8.19 0 0 1-4.181-1.145l-.299-.178-3.08.718.748-3.002-.196-.31A8.204 8.204 0 0 1 3.8 12.004c0-4.524 3.682-8.198 8.204-8.198 4.52 0 8.2 3.674 8.2 8.198 0 4.525-3.68 8.194-8.2 8.194z"/></svg>`;
+  const LOCK_SVG = `<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="var(--volt)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`;
 
-  function renderGrid(filter){
+  const grid = document.getElementById('catalog-grid');
+  let currentFilter = 'all';
+
+  function renderGrid(filter) {
+    currentFilter = filter;
+    const search = document.getElementById('searchInput').value.toLowerCase();
     grid.innerHTML = "";
-    const list = filter === "all" ? PRODUCTS : PRODUCTS.filter(p => p.category === filter);
+    let list = PRODUCTS.filter(p => filter === 'all' || p.category === filter);
+    if (search) list = list.filter(p => p.name.toLowerCase().includes(search) || p.categoryLabel.toLowerCase().includes(search));
     list.forEach((p, i) => {
       const card = document.createElement('div');
       card.className = 'card';
       const swatchesHtml = p.colors.map((c, ci) =>
         `<div class="swatch ${ci===0?'active':''}" data-ci="${ci}" style="background:${c.swatch}" title="${c.name}"></div>`
       ).join('');
+      const waMsg = `Hi Ucop Spikes! I want to check availability for:%0AProduct: ${p.name}%0APlease let me know what colours and sizes are available.`;
       card.innerHTML = `
         <div class="bib">NO. ${String(i+1).padStart(3,'0')}</div>
         <div class="frame"><img class="cardImg" src="${p.colors[0].images[0]}" alt="${p.name}"></div>
         <div class="info">
           <div class="cat">${p.categoryLabel}</div>
           <h3>${p.name}</h3>
-          <div class="row">
-            <span class="price">${p.price}</span>
-            <span class="check">Check <b>availability</b></span>
-          </div>
+          <div class="row"><span class="price">${p.price}</span></div>
           <div class="swatches">${swatchesHtml}</div>
-        </div>`;
-      // clicking a swatch previews that colour's thumbnail without opening the modal
+        </div>
+        <div class="card-wa-btn" data-wa-msg="${waMsg}">${WA_SVG} Check availability</div>
+        <div class="card-lock-note">${LOCK_SVG}<span>Order link sent after we confirm stock</span></div>`;
       card.querySelectorAll('.swatch').forEach(sw => {
-        sw.addEventListener('click', (e) => {
+        sw.addEventListener('click', e => {
           e.stopPropagation();
           const ci = +sw.dataset.ci;
           card.querySelector('.cardImg').src = p.colors[ci].images[0];
-          card.querySelectorAll('.swatch').forEach(x=>x.classList.remove('active'));
+          card.querySelectorAll('.swatch').forEach(x => x.classList.remove('active'));
           sw.classList.add('active');
           card.dataset.selectedColor = ci;
         });
       });
+      card.querySelector('.card-wa-btn').addEventListener('click', e => {
+        e.stopPropagation();
+        const ci = +(card.dataset.selectedColor || 0);
+        const color = p.colors[ci];
+        const msg = `Hi Ucop Spikes! I want to check availability for:%0AProduct: ${p.name}%0AColour: ${color.name}%0AIs this in stock? What sizes are available?`;
+        window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
+      });
+      card.querySelector('.card-lock-note').addEventListener('click', e => e.stopPropagation());
       card.addEventListener('click', () => openModal(p, +(card.dataset.selectedColor || 0)));
       grid.appendChild(card);
     });
+    if (!list.length) {
+      grid.innerHTML = `<div style="grid-column:1/-1;padding:60px 0;text-align:center;font-family:'Space Mono',monospace;font-size:12px;color:var(--steel);letter-spacing:.08em;text-transform:uppercase;">No spikes found</div>`;
+    }
   }
 
   document.querySelectorAll('.chip').forEach(chip => {
@@ -604,19 +510,18 @@
     });
   });
 
+  document.getElementById('searchInput').addEventListener('input', () => renderGrid(currentFilter));
+
   // ---- MODAL ----
   const overlay = document.getElementById('overlay');
   const mainImg = document.getElementById('mainImg');
   const thumbs = document.getElementById('thumbs');
   const waBtn = document.getElementById('waBtn');
-  let selectedSize = null;
-  let selectedColorIdx = 0;
-  let currentProduct = null;
+  const waBtnText = document.getElementById('waBtnText');
+  let selectedSize = null, selectedColorIdx = 0, currentProduct = null;
 
-  function openModal(p, startColorIdx){
-    currentProduct = p;
-    selectedSize = null;
-    selectedColorIdx = startColorIdx || 0;
+  function openModal(p, startColorIdx) {
+    currentProduct = p; selectedSize = null; selectedColorIdx = startColorIdx || 0;
     document.getElementById('mCat').textContent = p.categoryLabel;
     document.getElementById('mName').textContent = p.name;
     document.getElementById('mPrice').textContent = p.price;
@@ -631,7 +536,7 @@
       sw.title = c.name;
       sw.addEventListener('click', () => {
         selectedColorIdx = ci;
-        colorsWrap.querySelectorAll('.color-swatch').forEach(x=>x.classList.remove('selected'));
+        colorsWrap.querySelectorAll('.color-swatch').forEach(x => x.classList.remove('selected'));
         sw.classList.add('selected');
         loadGallery(p.colors[ci]);
         document.getElementById('mColorName').textContent = c.name;
@@ -646,10 +551,9 @@
     sizesWrap.innerHTML = "";
     p.sizes.forEach(sz => {
       const s = document.createElement('button');
-      s.className = 'size';
-      s.textContent = sz;
+      s.className = 'size'; s.textContent = sz;
       s.addEventListener('click', () => {
-        sizesWrap.querySelectorAll('.size').forEach(x=>x.classList.remove('selected'));
+        sizesWrap.querySelectorAll('.size').forEach(x => x.classList.remove('selected'));
         s.classList.add('selected');
         selectedSize = sz;
         updateWaBtn();
@@ -659,58 +563,55 @@
 
     updateWaBtn();
     overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
   }
 
-  function loadGallery(color){
+  function loadGallery(color) {
     mainImg.src = color.images[0];
     thumbs.innerHTML = "";
     color.images.forEach((src, idx) => {
       const t = document.createElement('img');
       t.src = src;
-      if(idx===0) t.classList.add('active');
+      if (idx === 0) t.classList.add('active');
       t.addEventListener('click', () => {
         mainImg.src = src;
-        thumbs.querySelectorAll('img').forEach(x=>x.classList.remove('active'));
+        thumbs.querySelectorAll('img').forEach(x => x.classList.remove('active'));
         t.classList.add('active');
       });
       thumbs.appendChild(t);
     });
   }
 
-  function updateWaBtn(){
-    if(selectedSize && currentProduct){
+  function updateWaBtn() {
+    if (selectedSize && currentProduct) {
       const colorName = currentProduct.colors[selectedColorIdx].name;
-      const msg = `Hi Ucop Spikes! I want to check availability for:%0A` +
-                  `Product: ${currentProduct.name}%0A` +
-                  `Colour: ${colorName}%0A` +
-                  `Size: ${selectedSize}%0A` +
-                  `Is this in stock?`;
+      const msg = `Hi Ucop Spikes! I want to check availability for:%0AProduct: ${currentProduct.name}%0AColour: ${colorName}%0ASize: ${selectedSize}%0AIs this in stock?`;
       waBtn.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
-      waBtn.textContent = "Check availability on WhatsApp";
+      waBtnText.textContent = `Check availability — ${selectedSize}`;
       waBtn.classList.remove('disabled');
-      document.getElementById('placeOrderLink').href =
-        `order.html?colour=${encodeURIComponent(colorName)}&size=${encodeURIComponent(selectedSize)}`;
     } else {
       waBtn.href = "#";
-      waBtn.textContent = "Select a size first";
+      waBtnText.textContent = "Select a size first";
       waBtn.classList.add('disabled');
-      document.getElementById('placeOrderLink').href = "order.html";
     }
   }
 
-  document.getElementById('modalClose').addEventListener('click', () => overlay.classList.remove('open'));
-  overlay.addEventListener('click', (e) => { if(e.target === overlay) overlay.classList.remove('open'); });
+  function closeModal() { overlay.classList.remove('open'); document.body.style.overflow = ''; }
+  document.getElementById('modalClose').addEventListener('click', closeModal);
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
 
-  // ---- SIZE GUIDE ----
   const sgOverlay = document.getElementById('sgOverlay');
-  function openSizeGuide(){ sgOverlay.classList.add('open'); }
-  document.getElementById('navSizeGuide').addEventListener('click', (e) => { e.preventDefault(); openSizeGuide(); });
+  function openSizeGuide() { sgOverlay.classList.add('open'); }
+  document.getElementById('navSizeGuide').addEventListener('click', e => { e.preventDefault(); openSizeGuide(); });
   document.getElementById('modalSizeGuide').addEventListener('click', openSizeGuide);
   document.getElementById('sgClose').addEventListener('click', () => sgOverlay.classList.remove('open'));
-  sgOverlay.addEventListener('click', (e) => { if(e.target === sgOverlay) sgOverlay.classList.remove('open'); });
+  sgOverlay.addEventListener('click', e => { if (e.target === sgOverlay) sgOverlay.classList.remove('open'); });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closeModal(); sgOverlay.classList.remove('open'); }
+  });
 
   renderGrid('all');
 </script>
-
 </body>
 </html>
